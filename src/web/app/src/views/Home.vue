@@ -1,6 +1,7 @@
 <template>
   <div>
     <BannerDetail></BannerDetail>
+    <DashBoard></DashBoard>
     <FeatureListDetail></FeatureListDetail>
   </div>
 </template>
@@ -8,12 +9,14 @@
 <script>
   // @ is an alias to /src
   import BannerDetail from '@/components/homePageDetail/BannerDetail.vue'
+  import DashBoard from '@/components/homePageDetail/DashBoard.vue'
   import FeatureListDetail from '@/components/homePageDetail/FeatureListDetail.vue'
 
   export default {
     name: 'home',
     components: {
       BannerDetail,
+      DashBoard,
       FeatureListDetail
     }
   }
