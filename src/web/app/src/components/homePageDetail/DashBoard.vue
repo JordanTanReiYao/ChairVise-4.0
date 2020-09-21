@@ -4,6 +4,7 @@
       <el-row>
         <div v-show="show" v-if="isLogin">
             <h3> Files Uploaded: {{versionsSize}}</h3>
+            <h3> Upcoming Conference: {{upcomingConferenceTitle}} at {{upcomingConferenceStart}}</h3>
         </div>
       </el-row>
     </zoom-center-transition>
@@ -50,6 +51,38 @@
       versionsSize() {
         return Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId))).length;
       },
+      upcomingConferenceTitle() {
+            let list = this.$store.state.conference.conferenceList;
+            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            let newList = [];
+            list.forEach((element) => {
+                var temp = new Date(element.date);
+                var date = (new Date(temp - tzoffset)).toISOString().slice(0, -1);
+                newList.push({
+                    id: element.id,
+                    title: element.name,
+                    start: date,
+                    allDay: false
+                })
+            });
+            return newList[0].title; 
+        },
+        upcomingConferenceStart() {
+            let list = this.$store.state.conference.conferenceList;
+            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            let newList = [];
+            list.forEach((element) => {
+                var temp = new Date(element.date);
+                var date = (new Date(temp - tzoffset)).toISOString().slice(0, -1);
+                newList.push({
+                    id: element.id,
+                    title: element.name,
+                    start: date,
+                    allDay: false
+                })
+            });
+            return newList[0].start; 
+        },
     },
     components: {
       ZoomCenterTransition
