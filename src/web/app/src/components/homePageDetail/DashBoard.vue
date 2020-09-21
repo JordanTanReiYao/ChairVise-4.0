@@ -3,6 +3,7 @@
     <zoom-center-transition :duration="500">      
       <el-row>
         <div v-show="show" v-if="isLogin">
+            <h3> Hello, {{userNickname}}</h3>
             <h3> Files Uploaded: {{versionsSize}}</h3>
             <h3> Upcoming Conference: {{upcomingConferenceTitle}} at {{upcomingConferenceStart}}</h3>
         </div>
@@ -40,6 +41,9 @@
       },
     },
     computed: {
+        userNickname() {
+            return this.$store.state.userInfo.userNickname
+        },
       isLogin() {
         return this.$store.state.userInfo.isLogin
       },
