@@ -40,11 +40,13 @@ public class RecordLogic {
     }
 
     public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){
-        return reviewRecordRepository.findAll();
+        //return reviewRecordRepository.findAll();
+        return reviewRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());
     }
 
     public List<SubmissionRecord> findAllSubmissionForUser(UserInfo currentUser){
-        return submissionRecordRepository.findAll();
+        //return submissionRecordRepository.findAll();
+        return submissionRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());
     }
 
     @Transactional

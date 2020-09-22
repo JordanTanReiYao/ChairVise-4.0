@@ -10,7 +10,7 @@ public interface SubmissionRecordRepository extends JpaRepository<SubmissionReco
 
     //List<SubmissionRecord> findByDataSetEquals(String dataSet);
     List<SubmissionRecord> findByVersionEquals(Version version);
-
+    List<SubmissionRecord> findByVersion_IdDataSet(String dataSetVersion);
     //void deleteAllByDataSetEquals(String dataSet);
     void deleteAllByVersionEquals(Version version);
 }
