@@ -28,8 +28,8 @@ viz*.json
 #src/main/resources/application-local.properties
 .settings/*
 .project
-application-local.properties
-application-prod.properties
+**/application-local.properties
+**/application-prod.properties
 
 gradle/wrapper/gradle-wrapper.properties
 
