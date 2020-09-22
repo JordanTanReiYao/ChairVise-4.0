@@ -6,14 +6,36 @@
           <el-col :span="6">
             <img alt="Vue logo" class="logo" src="@/assets/chair2.png"/>
           </el-col>
-          <el-col :span="15">
-            <h2> ChairVisE -- The Conference Data Visualisation Management System </h2>
-          </el-col>
+          <!--<el-col :span="15">
+            <h2 class='title'> ChairVisE -- The Conference Data Visualisation Management System </h2>
+          </el-col>-->
           <el-col :span="10">
-          <h3> Good day {{userNickname}}!</h3>
-          <h3> Files Uploaded: {{versionsSize}}</h3>
-          <h3 v-if="upcomingConferenceExists">Upcoming Conference: {{upcomingConferenceTitle}} at {{upcomingConferenceStart}}</h3>
-          <h3 v-else>You have no upcoming conferences enjoy!</h3>
+          <h3 class="greeting">Good Day {{userNickname}}!</h3>
+          <el-card :body-style="{ padding: '0px', height:'90px'  }">
+            <div>
+              <h2>Author Records</h2>  
+              <h1 class="figure">{{authorVersionsSize}}</h1>  
+              </div>
+        </el-card>
+        <el-card :body-style="{ padding: '0px' , height:'90px'}">
+            <div>
+              <h2>Review Records</h2>  
+              <h1 class="figure">{{reviewVersionsSize}}</h1>  
+              </div>
+        </el-card>
+        <el-card :body-style="{ padding: '0px' , height:'90px'}">
+            <div>
+              <h2>Submission Records</h2>  
+              <h1 class="figure">{{submissionVersionsSize}}</h1>  
+              </div>
+        </el-card>
+        <el-card class="conference" :body-style="{ padding: '0px' , height:'100px'}">
+            <div>
+          <h2 class='conference' v-if="upcomingConferenceExists">Upcoming Conference: {{upcomingConferenceTitle}}</h2>
+          <h2 class='conference' v-if="upcomingConferenceExists">Date: {{upcomingConferenceStart}}</h2>
+          <h2 class='noConference' v-else>You have no upcoming conferences enjoy!</h2> 
+              </div>
+        </el-card>
         </el-col>
         <el-col :span="6">
             <img alt="Book" class="side" src="@/assets/book.gif"/>
@@ -74,6 +96,24 @@
         let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
         let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
         return authorCount+reviewCount+submissionCount;
+      },
+      authorVersionsSize() {
+        let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
+        //let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
+        //let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
+        return authorCount//+reviewCount+submissionCount;
+      },
+      reviewVersionsSize() {
+        //let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
+        let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
+        //let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
+        return reviewCount//+submissionCount;
+      },
+      submissionVersionsSize() {
+        //let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
+        //let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
+        let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
+        return submissionCount;
       },
       upcomingConferenceTitle() {
             
@@ -165,20 +205,22 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   img.logo {
-    width: 250px;
-    height: 300px;
+    width: 280px;
+    height: 330px;
     text-align: center;
     display: block;
     margin: 0 auto;
+    margin-top:20px;
   }
   img.side {
-    width: 250px;
-    height: 300px;
+    width: 300px;
+    height: 350px;
+    align-content: center;
     text-align: right;
     display: block;
     margin-bottom: 50px;
     margin-left:100px;
-    margin-top:-80px;
+    margin-top:-60px;
 
    /* margin: 0 auto;*/
   
@@ -197,17 +239,29 @@
     background: #1e9fc4;
     padding: 30px;
   }
-  h2{
+  h2.title{
     margin-left:-60px;
     text-align: left;
   }
   h3 {
     text-align:center;
-    color:white;
+    color:black;
     font-size:29px;
     font-weight:bold;
-    margin-left: 40px;
+    /*margin-left: 40px;*/
     /*font-style: oblique;*/
+    /*font-family: 'Times New Roman', Times, serif;*/
+  }
+  h3.greeting {
+    text-align:center;
+    color:white;
+    font-size:50px;
+    font-weight:bold;
+    margin-left: 75px;
+    margin-right:-10px;
+    margin-top:-10px;
+    /*font-style: oblique;*/
+    margin-bottom:18px;
     font-family: 'Times New Roman', Times, serif;
   }
   h3.notlogin 
@@ -220,5 +274,27 @@
     margin-top: 70px;
     /*font-style: oblique;*/
     font-family: 'Times New Roman', Times, serif;
+  }
+  .el-card {
+    /*margin-top:10px;*/
+    margin: 13px;
+    background-color: whitesmoke;
+    text-align: center;
+    margin-left:70px;
+    margin-right:-10px;
+  }
+  .el-card.conference {
+    /*margin-top:10px;*/
+    margin: 13px;
+    background-color: whitesmoke;
+    text-align: center;
+    margin-left:70px;
+    margin-right:-10px;
+    /*margin-right: -75px;
+    /margin-left: -40px;*/
+  }
+  h1.figure{
+    margin-top: -20px;
+    font-size: 42px;
   }
 </style>
