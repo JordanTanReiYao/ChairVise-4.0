@@ -1,7 +1,10 @@
 import axios from 'axios'
 import {deepCopy} from "@/common/utility"
+import createPersistedState from 'vuex-persistedstate'
+
 
 export default {
+    plugins: [createPersistedState()],
     state: {
         conferenceList: [],
         conferenceForm: {
@@ -158,6 +161,6 @@ export default {
                 .finally(() => {
                     commit('setConferenceFormLoading', false);
                 })
-        }
+        } 
     }
 };

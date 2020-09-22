@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import sg.edu.nus.comp.cs3219.viz.common.entity.record.ReviewRecord;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.SubmissionRecord;
 import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
 import sg.edu.nus.comp.cs3219.viz.logic.RecordLogic;
+import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,6 +27,24 @@ public class RecordController extends BaseRestController {
     public RecordController(GateKeeper gateKeeper, RecordLogic recordLogic) {
         this.gateKeeper = gateKeeper;
         this.recordLogic = recordLogic;
+    }
+
+    @GetMapping("/record/author")
+    public List<AuthorRecord> authorRecordVersionList(){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAllAuthorForUser(currentUser);
+    }
+
+    @GetMapping("/record/review")
+    public List<ReviewRecord> ReviewRecordVersionList(){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAllReviewForUser(currentUser);
+    }
+
+    @GetMapping("/record/submission")
+    public List<SubmissionRecord> SubmissionRecordVersionList(){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAllSubmissionForUser(currentUser);
     }
 
     @PostMapping("/record/author")

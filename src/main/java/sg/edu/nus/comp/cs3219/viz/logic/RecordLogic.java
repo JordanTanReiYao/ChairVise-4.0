@@ -2,11 +2,15 @@ package sg.edu.nus.comp.cs3219.viz.logic;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.*;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.AuthorRecordRepository;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.ReviewRecordRepository;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.SubmissionAuthorRecordRepository;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.SubmissionRecordRepository;
+import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +33,17 @@ public class RecordLogic {
         this.submissionRecordRepository = submissionRecordRepository;
         this.submissionAuthorRecordRepository = submissionAuthorRecordRepository;
         this.reviewRecordRepository = reviewRecordRepository;
+    }
+    public List<AuthorRecord> findAllAuthorForUser(UserInfo currentUser){
+        return authorRecordRepository.findAll();
+    }
+
+    public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){
+        return reviewRecordRepository.findAll();
+    }
+
+    public List<SubmissionRecord> findAllSubmissionForUser(UserInfo currentUser){
+        return submissionRecordRepository.findAll();
     }
 
     @Transactional
@@ -108,4 +123,5 @@ public class RecordLogic {
             // the other field can be arbitrary
         }).collect(Collectors.toList()));
     }
+    
 }
