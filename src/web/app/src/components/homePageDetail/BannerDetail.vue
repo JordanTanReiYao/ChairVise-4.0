@@ -42,17 +42,17 @@
           </el-col>
         </div>
         <div v-show="show" v-else>
+          <el-col>
+          <h3 class="logout">Good Day User!</h3>
           <el-col :span="6">
-            <img alt="Vue logo" class="logo" src="@/assets/chair2.png"/>
-          </el-col>
-          <el-col :span="15">
-            <h2> ChairVisE -- The Conference Data Visualisation Management System </h2>
+            <img alt="Vue logo" class="notlogin" src="@/assets/chair2.png"/>
           </el-col>
           <el-col :span="10">
-            <h3 class="notlogin">Please login to use the application</h3>
+            <h3 class="logoutmessage">Please login to use the application</h3>
           </el-col>
         <el-col :span="6">
-            <img alt="Book" class="notlogin" src="@/assets/book.gif"/>
+            <img alt="Book" class="sidenotlogin" src="@/assets/book.gif"/>
+          </el-col>
           </el-col>
         </div>
       </el-row>
@@ -205,7 +205,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   img.logo {
-    width: 280px;
+    width: 290px;
     height: 330px;
     text-align: center;
     display: block;
@@ -230,9 +230,18 @@
     height: 300px;
     text-align: right;
     display: block;
-    margin-bottom: 50px;
-    margin-left:180px;
-    margin-top:-100px;
+    margin-bottom: 10px;
+    margin-left:60px;
+    margin-top:-80px;
+  
+  }
+  img.sidenotlogin {
+    width: 280px;
+    height: 330px;
+    text-align: right;
+    display: block;
+    margin-left:120px;
+    margin-top:-165px;
   
   }
   .el-row {    
@@ -264,16 +273,20 @@
     margin-bottom:18px;
     font-family: 'Times New Roman', Times, serif;
   }
-  h3.notlogin 
+  h3.logout
   {
     text-align:center;
     color:white;
+    font-size:35px;
+    font-weight:bold;  
+  }
+  h3.logoutmessage
+  {
+    text-align:center;
+    color:white;
+    margin-right: -120px;
     font-size:29px;
-    font-weight:bold;
-    margin-left: 110px;
-    margin-top: 70px;
-    /*font-style: oblique;*/
-    font-family: 'Times New Roman', Times, serif;
+    font-weight:bold;  
   }
   .el-card {
     /*margin-top:10px;*/
