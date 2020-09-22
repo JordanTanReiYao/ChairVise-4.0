@@ -24,8 +24,8 @@ src/web/app/node_modules/*
 
 # Additional files to ignore
 viz*.json
-src/main/resources/application-prod.properties
-src/main/resources/application-local.properties
+#src/main/resources/application-prod.properties
+#src/main/resources/application-local.properties
 .settings/*
 .project
 application-local.properties
