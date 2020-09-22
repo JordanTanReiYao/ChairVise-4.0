@@ -35,7 +35,8 @@ public class RecordLogic {
         this.reviewRecordRepository = reviewRecordRepository;
     }
     public List<AuthorRecord> findAllAuthorForUser(UserInfo currentUser){
-        return authorRecordRepository.findAll();
+        //return authorRecordRepository.findAll();
+        return authorRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());
     }
 
     public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){

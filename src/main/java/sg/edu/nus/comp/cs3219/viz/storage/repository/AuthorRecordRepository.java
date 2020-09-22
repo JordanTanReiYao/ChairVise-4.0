@@ -11,7 +11,7 @@ public interface AuthorRecordRepository extends JpaRepository<AuthorRecord, Long
     //List<AuthorRecord> findByDataSetEquals(String dataSet);
 
     List<AuthorRecord> findByVersionEquals(Version version);
-
+    List<AuthorRecord> findByVersion_IdDataSet(String dataSetVersion);
     //void deleteAllByDataSetEquals(String dataSet);
     void deleteAllByVersionEquals(Version version);
 
