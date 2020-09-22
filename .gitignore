@@ -28,6 +28,8 @@ src/main/resources/application-prod.properties
 src/main/resources/application-local.properties
 .settings/*
 .project
+application-local.properties
+application-prod.properties
 
 gradle/wrapper/gradle-wrapper.properties
 
