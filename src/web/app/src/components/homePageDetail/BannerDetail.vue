@@ -66,7 +66,6 @@
       versions() {
         let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
         this.setDefaultValueForVersionList(list[0]);
-        return 2;
         return (new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
         return list;
       },
@@ -74,7 +73,6 @@
         let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
         let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
         let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
-        //return 2;
         return authorCount+reviewCount+submissionCount;
       },
       upcomingConferenceTitle() {
@@ -94,7 +92,6 @@
                   closest=new Date(date);
                   
             }});
-            //return 'aa';
             return closestEvent.name; 
             
         },
@@ -117,7 +114,6 @@
 
             let nearestDate=new Date(closest);
             nearestDate = (new Date(nearestDate - tzoffset)).toISOString().slice(0, -1);
-            //return 'aa';
             return nearestDate.slice(0,16).replace("T"," ");
              
         },
@@ -129,16 +125,17 @@
             var MAX_TIMESTAMP = 8640000000000000;
             let closest=Infinity;
             let closestEvent=Object;
-            let counter= 0;
+            let counter=0;
             list.forEach(function(element) {
             let date = new Date(element.date);
+            
             if (date > now && (date <= new Date(closest) || date <= closest)) {
                   closestEvent = element;
                   closest=new Date(date);
                   counter=counter+1;
             }});
-            
-            if (counter == 0){
+
+            if (counter==0){
               return false;
             }
             else{
