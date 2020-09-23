@@ -11,25 +11,25 @@
           </el-col>-->
           <el-col :span="10">
           <h3 class="greeting">Good Day {{userNickname}}!</h3>
-          <el-card :body-style="{ padding: '0px', height:'90px'  }">
+          <el-card :body-style="{ padding: '0px', height:'78px'  }">
             <div>
-              <h2>Author Records</h2>  
+              <h2 class="cardtext">Author Records</h2>  
               <h1 class="figure">{{authorVersionsSize}}</h1>  
               </div>
         </el-card>
-        <el-card :body-style="{ padding: '0px' , height:'90px'}">
+        <el-card :body-style="{ padding: '0px' , height:'78px'}">
             <div>
-              <h2>Review Records</h2>  
+              <h2 class='cardtext'>Review Records</h2>  
               <h1 class="figure">{{reviewVersionsSize}}</h1>  
               </div>
         </el-card>
-        <el-card :body-style="{ padding: '0px' , height:'90px'}">
+        <el-card :body-style="{ padding: '0px' , height:'78px'}">
             <div>
-              <h2>Submission Records</h2>  
+              <h2 class='cardtext'>Submission Records</h2>  
               <h1 class="figure">{{submissionVersionsSize}}</h1>  
               </div>
         </el-card>
-        <el-card class="conference" :body-style="{ padding: '0px' , height:'100px'}">
+        <el-card class="conference" :body-style="{ padding: '0px' , height:'90px'}">
             <div>
           <h2 class='conference' v-if="upcomingConferenceExists">Upcoming Conference: {{upcomingConferenceTitle}}</h2>
           <h2 class='conference' v-if="upcomingConferenceExists">Date: {{upcomingConferenceStart}}</h2>
@@ -290,6 +290,7 @@
   }
   .el-card {
     /*margin-top:10px;*/
+  
     margin: 13px;
     background-color: whitesmoke;
     text-align: center;
@@ -307,7 +308,11 @@
     /margin-left: -40px;*/
   }
   h1.figure{
-    margin-top: -20px;
+    margin-top: -22px;
+    margin-bottom:80px;
     font-size: 42px;
+  }
+  h2.cardtext{
+    margin-top: 10px;
   }
 </style>
