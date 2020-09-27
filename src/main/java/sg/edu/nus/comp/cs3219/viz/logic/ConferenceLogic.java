@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ConferenceLogic {
 
     private final ConferenceRepository conferenceRepository;
-
+    
     public ConferenceLogic(ConferenceRepository conferenceRepository) {
         this.conferenceRepository = conferenceRepository;
     }
@@ -31,7 +31,6 @@ public class ConferenceLogic {
         newConference.setDescription(conference.getDescription());
         newConference.setDate(conference.getDate());
         newConference.setCreatorIdentifier(userInfo.getUserEmail());
-
         return conferenceRepository.save(newConference);
     }
 

@@ -64,6 +64,10 @@ dependencies {
     testCompile("com.google.appengine:appengine-api-stubs:1.9.+")
     testCompile("com.google.appengine:appengine-testing:1.9.+")
     testRuntime('com.h2database:h2')
+
+    // Spring Boot Starter Mail
+    //compile('org.springframework.boot:spring-boot-starter-mail')
+    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 appengine {
