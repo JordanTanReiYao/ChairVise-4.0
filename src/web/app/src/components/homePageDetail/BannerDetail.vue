@@ -70,9 +70,9 @@
     props: {
       msg: String
     },
-    mounted() {
+    /*mounted() {
       this.loadBanner();
-    },
+    },*/
     methods: {
       loadBanner() {
         this.show = true;
@@ -84,18 +84,6 @@
         },
       isLogin() {
         return this.$store.state.userInfo.isLogin
-      },
-      versions() {
-        let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
-        this.setDefaultValueForVersionList(list[0]);
-        return (new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
-        return list;
-      },
-      versionsSize() {
-        let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
-        let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
-        let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
-        return authorCount+reviewCount+submissionCount;
       },
       authorVersionsSize() {
         let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
@@ -118,10 +106,10 @@
       upcomingConferenceTitle() {
             
             let list = this.$store.state.conference.conferenceList;
-            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-            let newList = [];
+            /*var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds*/
+            /*let newList = [];*/
             let now = new Date();
-            var MAX_TIMESTAMP = 8640000000000000;
+            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
             let closestEvent=Object;
             list.forEach(function(element) {
@@ -140,14 +128,14 @@
             var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
             
             let now = new Date();
-            var MAX_TIMESTAMP = 8640000000000000;
+            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
-            let closestEvent=Object;
+            /*let closestEvent=Object;*/
             list.forEach(function(element) {
             let date = new Date(element.date);
             
             if (date > now && (date <= new Date(closest) || date <= closest)) {
-                  closestEvent = element;
+                  /*closestEvent = element;*/
                   closest=new Date(date);
                   
             }});
@@ -159,18 +147,18 @@
         },
         upcomingConferenceExists() {
             let list = this.$store.state.conference.conferenceList;
-            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            /*var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds*/
             
             let now = new Date();
-            var MAX_TIMESTAMP = 8640000000000000;
+            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
-            let closestEvent=Object;
+            /*let closestEvent=Object;*/
             let counter=0;
             list.forEach(function(element) {
             let date = new Date(element.date);
             
             if (date > now && (date <= new Date(closest) || date <= closest)) {
-                  closestEvent = element;
+                  /*closestEvent = element;*/
                   closest=new Date(date);
                   counter=counter+1;
             }});
@@ -189,6 +177,7 @@
       ZoomCenterTransition
     },
     mounted() { 
+        this.loadBanner();
         Promise.all([
         this.$store.dispatch('getConferenceList'),
         this.$store.dispatch('getAuthorRecordList'),
