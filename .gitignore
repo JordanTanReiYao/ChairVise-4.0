@@ -23,15 +23,19 @@ src/main/webapp/dist/*
 src/web/app/node_modules/*
 
 # Additional files to ignore
-viz*.json
-src/main/resources/application-prod.properties
-src/main/resources/application-local.properties
+#viz*.json
+#src/main/resources/application-prod.properties
+#src/main/resources/application-local.properties
 .settings/*
 .project
+
+#**/application-local.properties
+#**/application-prod.properties
 bin/*
 
-gradle/wrapper/gradle-wrapper.properties
 
-package-lock.json
+#gradle/wrapper/gradle-wrapper.properties
 
-src/main/webapp/WEB-INF/appengine-web.xml
+#package-lock.json
+
+#src/main/webapp/WEB-INF/appengine-web.xml

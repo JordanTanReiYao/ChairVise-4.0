@@ -4,6 +4,9 @@
       <img id="logo" alt="Chairvise logo" src="@/assets/logo.png"/>
       <span> Chairvise </span>
     </el-menu-item>
+    <el-col :span="15">
+        <h2 class='title'> ChairVisE -- The Conference Data Visualisation Management System </h2>
+    </el-col>
     <!--<el-menu-item index="/importData" :disabled="!isLogin">Import Data</el-menu-item>-->
     <!--<el-menu-item index="/analyze" :disabled="!isLogin">Analyze</el-menu-item>-->
     <el-submenu index="2" class="navbar-submenu" popper-class="navbar-submenu-menu" v-if="isLogin" v-loading.fullscreen.lock="isFullscreenLoading"
@@ -94,5 +97,11 @@ i.el-icon-user-solid {
 
 .navbar > .el-menu-item.is-active {
     border-bottom: 0;
+}
+
+h2.title{
+  margin-left: 50px;
+  margin-right:-60px;
+  text-align: right;
 }
 </style>

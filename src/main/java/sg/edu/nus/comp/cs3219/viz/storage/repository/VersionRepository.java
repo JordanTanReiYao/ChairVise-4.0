@@ -10,6 +10,6 @@ public interface VersionRepository extends JpaRepository<Version, Version.Versio
     List<Version> findById_DataSetEquals(String dataSet);
 
     List<Version> findById_DataSetAndId_RecordType(String dataSet, String recordType);
-
+    List<Version> findById_DataSet(String dataSet);
     void deleteAllById_DataSetEquals(String dataSet);
 }
