@@ -28,8 +28,11 @@ src/web/app/node_modules/*
 #src/main/resources/application-local.properties
 .settings/*
 .project
+
 #**/application-local.properties
 #**/application-prod.properties
+bin/*
+
 
 #gradle/wrapper/gradle-wrapper.properties
 

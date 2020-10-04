@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.cs3219.viz.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Conference;
@@ -13,6 +14,9 @@ public class ConferenceLogic {
 
     private final ConferenceRepository conferenceRepository;
 
+    @Autowired
+    private EmailServiceLogic emailService;
+    
     public ConferenceLogic(ConferenceRepository conferenceRepository) {
         this.conferenceRepository = conferenceRepository;
     }
@@ -31,7 +35,8 @@ public class ConferenceLogic {
         newConference.setDescription(conference.getDescription());
         newConference.setDate(conference.getDate());
         newConference.setCreatorIdentifier(userInfo.getUserEmail());
-
+        // Send email
+        emailService.sendEmail("chairvise@gmail.com", "pewpewt97@gmail.com", "Created new conference, " + conference.getName());
         return conferenceRepository.save(newConference);
     }
 
