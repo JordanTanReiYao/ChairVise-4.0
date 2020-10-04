@@ -66,8 +66,8 @@ dependencies {
     testRuntime('com.h2database:h2')
 
     // Spring Boot Starter Mail
-    //compile('org.springframework.boot:spring-boot-starter-mail')
-    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile('org.springframework.boot:spring-boot-starter-mail')
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 appengine {
