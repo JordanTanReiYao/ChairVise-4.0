@@ -38,6 +38,14 @@ public class RecordLogic {
         //return authorRecordRepository.findAll();
         return authorRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());
     }
+    
+    public List<AuthorRecord> findAuthorByVersionForUser(UserInfo currentUser, String version){
+        //return authorRecordRepository.findAll();
+        //currentUser.getUserEmail(),
+        return authorRecordRepository.findByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(currentUser.getUserEmail(),
+        version);
+        //return authorRecordRepository.findByVersion_IdVersionEquals(version);
+    }
 
     public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){
         //return reviewRecordRepository.findAll();

@@ -56,6 +56,20 @@
           <zoom-x-transition :duration="500" :delay="600">
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">
+                <img src="@/assets/dataIcon4.png"/>
+                <el-button type="primary" class="button" @click="manageData">
+                  Manage Data
+                </el-button>
+              </el-card>
+            </el-col>
+          </zoom-x-transition>
+        </el-row>
+        </div>
+        <div class="options-list2" v-if="isLogin">
+        <el-row type="flex" :gutter="16" align="middle" justify="center">
+        <zoom-x-transition :duration="500" :delay="600">
+            <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
+              <el-card shadow="hover" class="manage" align="middle">
                 <img src="@/assets/schedule.png"/>
                 <el-button type="primary" class="button" @click="conference">
                   Track Conference
@@ -95,6 +109,9 @@
       importData() {
         this.$router.push("/importData");
       },
+      manageData(){
+        this.$router.push("/manageData")
+      },
       loadFeatures() {
         this.show = true;
       },
@@ -110,25 +127,38 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  h1{
+    margin-top: -12px;
+    text-align: center;
+    font-size:30px;
+  }
   i {
     font-size: 4rem;    
     margin-bottom: 1.5rem;
   }
-
   .el-card {
     margin: 0px;
     text-align: center;
   }
-
   .el-button--text {
     color: black;
   }
-
   .page {
     padding: 20px;
   }
+  .options-list2 .el-button{
+    width:100%
+  }
+  .options-list2 {
+    margin-top: 10px;
+  }
+  .img{
+    height: 20px;
+    width: 20px;
+  }
 
   .options-list .el-button {
+    margin-top: 5px;
     width: 100%
   }
 </style>

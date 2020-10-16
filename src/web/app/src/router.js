@@ -79,6 +79,15 @@ export default new Router({
       props: true
     },
     {
+      path: '/manageData',
+      name: 'details',
+      meta: {
+        title: 'Manage Data Page',
+      },
+      component: () => import(/* webpackChunkName: "analyze" */ './views/ManageData.vue'),
+      props: true
+    },
+    {
       path: '/importData',
       name: 'importData',
       meta: {

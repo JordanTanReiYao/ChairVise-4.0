@@ -8,7 +8,8 @@ export default {
   state: {
     AuthorRecordList: [],
     ReviewRecordList: [],
-    SubmissionRecordList:[]  
+    SubmissionRecordList:[]  ,
+    AuthorRecordVersionList:[2,3,4]
   },
   mutations: {
     
@@ -17,6 +18,9 @@ export default {
     },
     setReviewRecordList(state,payload){
       state.ReviewRecordList = payload;
+    },
+    setAuthorRecordVersionList(state,payload){
+      state.AuthorRecordVersionList = payload;
     },
     setSubmissionRecordList(state,payload){
       state.SubmissionRecordList = payload;
@@ -28,6 +32,19 @@ export default {
         axios.get('/api/record/author')
             .then(response => {
               commit('setAuthorRecordList', response.data)
+            })
+            .catch(e => {
+              commit('setPresentationListApiError', e.toString());
+            })
+            .finally(() => {
+              commit('setPresentationListLoading', false);
+            })
+      },
+      async getAuthorRecordVersionList({commit},version) {
+        commit('setPresentationListLoading', true);
+        axios.get(`/api/record/author/${version}`)
+            .then(response => {
+              commit('setAuthorRecordVersionList', response.data)
             })
             .catch(e => {
               commit('setPresentationListApiError', e.toString());
