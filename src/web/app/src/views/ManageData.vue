@@ -47,7 +47,12 @@
     <vue-table-dynamic :params="paramz" ref="table"></vue-table-dynamic>
   </div>
   <!--<div><h2>{{authorRecordss}}</h2></div>-->
-  <v2-table :data="authorRecordz" v-if="displayAuthor" border=true>
+  <v2-table :data="authorRecordz" v-if="displayAuthor" border=true stripe=true
+  :loading="loading" 
+    :total="total"
+    :shown-pagination="true"
+    :pagination-info="paginationInfo"
+    @page-change="handlePageChange">
     <v2-table-column label="id" prop="id"></v2-table-column>
     <v2-table-column label="version" prop="version"></v2-table-column>
     <v2-table-column label="type" prop="type"></v2-table-column>
@@ -105,6 +110,12 @@ var firstVideo = Vue.component('first-video', {
         { id: '2', Type: 'SoftCon' }
 
     ],
+    currentPage: 1,
+        total: 624,
+        loading: false,
+        paginationInfo: {
+          text: '<span>Total of <strong>25</strong>, <strong>25</strong> per page</span>'
+        },
     authorRecordz:null,
     versionData:null,
     conference:null,
@@ -230,7 +241,24 @@ var firstVideo = Vue.component('first-video', {
             firstName:v.firstName,lastName:v.lastName,email:v.email,
             country:v.country,organisation:v.organisation,webPage:v.webPage,
             personId:v.personId,isCorresponding:v.isCorresponding}))));}
-    }
+    },
+    handlePageChange(page) {
+        this.currentPage = page;
+        this.loading = true;
+        let start = (page - 1) * 50 + 1;
+
+        const list = this.authorRecordz.map(item => {
+          return Object.assign({}, item, {
+            name: `test${start++}`
+          });
+        });
+
+        setTimeout(() => {
+          this.loading = false;
+          this.authorRecordz = [].concat(list);
+        }, 2000);  
+      }
+
     },
   mounted() { 
         //this.loadBanner();
