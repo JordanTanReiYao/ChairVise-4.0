@@ -1,18 +1,8 @@
 <template>
   <div>
-      <div><h2>Select the criteria below to specify dataset to display</h2>
-       <h2>THIS ONE IS {{authorkk}}</h2>
-       <!--<h2>THIS ONE IS {{localData}}</h2>-->
-       </div>
-    <!--<div id='dropdownlist' class="drop" style="margin:50px auto 0; width:250px;">
-        <br>
-        <ejs-dropdownlist popupHeight="200px" popupWidth="250px" class="dropdownl"
-        :dataSource='localData' :fields='localField' placeholder='Select Version of Record'
-        sortOrder='Descending'>
-        </ejs-dropdownlist>
-        
-    </div>-->
-    <div id="vue-instance">
+    <div><h2>Select the criteria below to specify dataset to display</h2>
+    <h2>THIS ONE IS {{reviews}}</h2>
+<div id="vue-instance">
     <el-row type="flex" :gutter="16" align="middle" justify="center"> 
     <select class="form-control" @change="changeRecord($event)" dir="ltr">
     <option value="" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
@@ -32,21 +22,14 @@
   
     </el-row>
         <el-row type="flex" :gutter="16" align="middle" justify="center">    
-    <el-button type="primary" class="button" @click="getThem">
-                  Import Data
-                </el-button>
-                 </el-row>
-<!--<p><span>Selected record: {{recordType}}</span></p>
-<p><span>Selected version: {{version}}</span></p>
-<p><span>Selected conference: {{conference}}</span></p>-->
+    <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
+      </el-row>
+
 </div>
 <div v-if="display">
 <h2>HWRBVFERJHVBEJ ERGFERGV {{recordType}}</h2>
 </div>
- <div style="width: 600px">
-    <vue-table-dynamic :params="paramz" ref="table"></vue-table-dynamic>
-  </div>
-  <!--<div><h2>{{authorRecordss}}</h2></div>-->
+
   <v2-table :data="authorRecordz" v-if="displayAuthor" border=true stripe=true
   :loading="loading" 
     :total="total"
@@ -68,8 +51,9 @@
   </v2-table>
   </div>
     
-   
+</div>
 </template>
+
 
 <script>
 import Vue from 'vue';
@@ -83,18 +67,6 @@ import V2Table from 'v2-table';
 Vue.use(V2Table);
 
 
-/*var remoteDataSource = new DataManager({
-  url: 'https://ej2services.syncfusion.com/production/web-services/api/Employees',
-  adaptor: new WebApiAdaptor,
-  crossDomain: true
-});*/
-var start = Vue.component('start', {
-	template: '<div><h2>This is the startewfwefwef component</h2></div>'
-})
-
-var firstVideo = Vue.component('first-video', {
-	template: '<div>This is a video!</div>'
-})
 
   export default {
     name: 'ManageData',
@@ -168,6 +140,11 @@ var firstVideo = Vue.component('first-video', {
             return x
         })
         return authorCount;
+
+    },
+    reviews(){
+      let reviews=Array.from(new Set(this.$store.state.record.ReviewRecordList));
+      return reviews;
 
     }
       },
@@ -264,9 +241,9 @@ var firstVideo = Vue.component('first-video', {
         //this.loadBanner();
         Promise.all([
         //this.$store.dispatch('getConferenceList'),
-        this.$store.dispatch('getAuthorRecordList')//,
-        //this.$store.dispatch('getReviewRecordList'),
-        //this.$store.dispatch('getSubmissionRecordList')
+        //this.$store.dispatch('getAuthorRecordList'),
+        this.$store.dispatch('getReviewRecordList'),
+        this.$store.dispatch('getSubmissionRecordList')
         ]).finally(() => {
         // using "finally" so even if there are errors, it stops "loading"
         this.loading = false})
