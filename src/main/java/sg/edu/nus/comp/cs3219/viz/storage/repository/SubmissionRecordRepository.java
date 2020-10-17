@@ -11,6 +11,7 @@ public interface SubmissionRecordRepository extends JpaRepository<SubmissionReco
     //List<SubmissionRecord> findByDataSetEquals(String dataSet);
     List<SubmissionRecord> findByVersionEquals(Version version);
     List<SubmissionRecord> findByVersion_IdDataSet(String dataSetVersion);
+    List<SubmissionRecord> findByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(String user, String version);
     //void deleteAllByDataSetEquals(String dataSet);
     void deleteAllByVersionEquals(Version version);
 }

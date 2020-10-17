@@ -9,7 +9,9 @@ export default {
     AuthorRecordList: [],
     ReviewRecordList: [],
     SubmissionRecordList:[]  ,
-    AuthorRecordVersionList:[2,3,4]
+    AuthorRecordVersionList:[],
+    ReviewRecordVersionList: [],
+    SubmissionRecordVersionList:[]
   },
   mutations: {
     
@@ -22,8 +24,14 @@ export default {
     setAuthorRecordVersionList(state,payload){
       state.AuthorRecordVersionList = payload;
     },
+    setReviewRecordVersionList(state,payload){
+      state.ReviewRecordVersionList = payload;
+    },
     setSubmissionRecordList(state,payload){
       state.SubmissionRecordList = payload;
+    },
+    setSubmissionRecordVersionList(state,payload){
+      state.SubmissionRecordVersionList=payload;
     }
   },
   actions: {
@@ -66,11 +74,37 @@ export default {
               commit('setPresentationListLoading', false);
             })
       },
+      async getReviewRecordVersionList({commit},version) {
+        commit('setPresentationListLoading', true);
+        axios.get(`/api/record/review/${version}`)
+            .then(response => {
+              commit('setReviewRecordVersionList', response.data)
+            })
+            .catch(e => {
+              commit('setPresentationListApiError', e.toString());
+            })
+            .finally(() => {
+              commit('setPresentationListLoading', false);
+            })
+      },
       async getSubmissionRecordList({commit}) {
         commit('setPresentationListLoading', true);
         axios.get('/api/record/submission')
             .then(response => {
               commit('setSubmissionRecordList', response.data)
+            })
+            .catch(e => {
+              commit('setPresentationListApiError', e.toString());
+            })
+            .finally(() => {
+              commit('setPresentationListLoading', false);
+            })
+      },
+      async getSubmissionRecordVersionList({commit},version) {
+        commit('setPresentationListLoading', true);
+        axios.get(`/api/record/submission/${version}`)
+            .then(response => {
+              commit('setSubmissionRecordVersionList', response.data)
             })
             .catch(e => {
               commit('setPresentationListApiError', e.toString());
