@@ -64,16 +64,20 @@
                 dir="ltr">{{record.version}}</option>
         </select>
 
-        <div class="form-card">
-          <el-upload v-if="isReadyForUpload" drag action=""
-                    :auto-upload="false"
-                    :show-file-list="false"
-                    :multiple="false"
-                    :on-change="fileUploadHandler">
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">Drop .csv file here or <em>click to upload</em></div>
-          </el-upload>
-        </div>
+        <v2-table>
+            <v2-table-column label="id" prop="id"></v2-table-column>
+            <v2-table-column label="version" prop="version"></v2-table-column>
+            <v2-table-column label="type" prop="type"></v2-table-column>
+            <v2-table-column label="submissionId" prop="submissionId"></v2-table-column>  
+            <v2-table-column label="firstName" prop="firstName"></v2-table-column>  
+            <v2-table-column label="lastName" prop="lastName"></v2-table-column>  
+            <v2-table-column label="email" prop="email"></v2-table-column>  
+            <v2-table-column label="country" prop="country"></v2-table-column>  
+            <v2-table-column label="organisation" prop="organisation"></v2-table-column> 
+            <v2-table-column label="webPage" prop="webPage"></v2-table-column> 
+            <v2-table-column label="personId" prop="personId"></v2-table-column> 
+            <v2-table-column label="isCorresponding" prop="isCorresponding"></v2-table-column> 
+        </v2-table>
       </div>
 
       </el-card>
