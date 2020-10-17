@@ -8,6 +8,7 @@ import conference from "./modules/conference";
 import section from "./modules/section";
 import dbMetaData from "./modules/dbMetaData";
 import dataMapping from "./modules/dataMapping";
+import dataManagement from "./modules/dataManagement";
 import record from "./modules/record"
 
 Vue.use(Vuex);
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     accessControl,
     section,
     dbMetaData,
-    dataMapping
+    dataMapping,
+    dataManagement
   }
 })

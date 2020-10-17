@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {processMapping} from '@/store/helpers/processor.js'
 
 export default {
   state: {
@@ -127,34 +126,6 @@ export default {
     clearPredefinedSwitch(state) {
       state.data.hasPredefined = null;
       state.hasPredefinedSwitchSpecified = false;
-    },
-
-    setMapping(state, payload) {
-      try {
-        state.error = [];
-        state.data.mappingResult = payload.map;
-        state.mappingFinished = true;
-        state.data.processedResult =
-          processMapping(payload.map,
-            state.data.uploadedData,
-            state.data.dbSchema,
-            state.data.hasHeader);
-      } catch (err) {
-        state.error.push(err);
-        state.mappingFinished = false;
-        state.data.mappingResult = [];
-        state.data.processedResult = [];
-      }
-    },
-
-    clearMapping(state) {
-      state.data.mappingResult = [];
-      state.data.processedResult = [];
-      state.mappingFinished = false;
-    },
-
-    setDataMappingError(state, err) {
-      state.error.push(err);
     },
 
     clearError(state) {

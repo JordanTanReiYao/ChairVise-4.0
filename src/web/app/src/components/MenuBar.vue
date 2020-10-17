@@ -5,7 +5,7 @@
       <span> Chairvise </span>
     </el-menu-item>
     <el-col :span="15">
-        <h2 class='title'> ChairVisE -- The Conference Data Visualisation Management System </h2>
+        <h2 class='title'> The Conference Data Visualisation Management System </h2>
     </el-col>
     <!--<el-menu-item index="/importData" :disabled="!isLogin">Import Data</el-menu-item>-->
     <!--<el-menu-item index="/analyze" :disabled="!isLogin">Analyze</el-menu-item>-->
