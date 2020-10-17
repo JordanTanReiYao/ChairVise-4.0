@@ -35,6 +35,12 @@ public class RecordController extends BaseRestController {
         return recordLogic.findAllAuthorForUser(currentUser);
     }
 
+    @GetMapping("/record/author/{version}")
+    public List<AuthorRecord> authorRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAuthorByVersionForUser(currentUser,version);
+    }
+
     @GetMapping("/record/review")
     public List<ReviewRecord> ReviewRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
