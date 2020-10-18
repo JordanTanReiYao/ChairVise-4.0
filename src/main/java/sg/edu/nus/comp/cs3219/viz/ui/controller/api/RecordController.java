@@ -35,16 +35,67 @@ public class RecordController extends BaseRestController {
         return recordLogic.findAllAuthorForUser(currentUser);
     }
 
+    @GetMapping("/record/author/{version}")
+    public List<AuthorRecord> authorRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAuthorByVersionForUser(currentUser,version);
+    }
+
+    @DeleteMapping("/record/author/{version}")
+    public ResponseEntity<?> deleteAuthorRecord(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        AuthorRecord oldAuthorRecord = 
+                ///recordLogic.findAuthorByVersionForUser(currentUser, version)
+                //.orElseThrow(() -> new PresentationNotFoundException(id));
+        //gateKeeper.verifyDeletionAccessForRecord(oldAuthorRecord);
+        //recordLogic.deleteByVersion(version);
+        //return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/record/review")
     public List<ReviewRecord> ReviewRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
         return recordLogic.findAllReviewForUser(currentUser);
     }
 
+    @GetMapping("/record/review/{version}")
+    public List<ReviewRecord> ReviewRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findReviewByVersionForUser(currentUser,version);
+    }
+
+    @DeleteMapping("/record/review/{version}")
+    public ResponseEntity<?> deleteReviewRecord(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        ReviewRecord oldReviewRecord = 
+                //recordLogic.findReviewByVersionForUser(currentUser, version)
+                //.orElseThrow(() -> new PresentationNotFoundException(id));
+        //gateKeeper.verifyDeletionAccessForRecord(oldReviewRecord);
+        //recordLogic.deleteById(version);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/record/submission")
     public List<SubmissionRecord> SubmissionRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
         return recordLogic.findAllSubmissionForUser(currentUser);
+    }
+
+    @GetMapping("/record/submission/{version}")
+    public List<SubmissionRecord> SubmissionRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findSubmissionByVersionForUser(currentUser,version);
+    }
+
+    @DeleteMapping("/record/submission/{version}")
+    public ResponseEntity<?> deleteSubmissionRecord(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        SubmissionRecord oldSubmissionRecord = 
+                //recordLogic.findSubmissionByVersionForUser(currentUser, version)
+                //.orElseThrow(() -> new PresentationNotFoundException(id));
+        //gateKeeper.verifyDeletionAccessForRecord(oldSubmissionRecord);
+        //recordLogic.deleteById(version);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/record/author")

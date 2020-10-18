@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Exportable(name = "Author Record", nameInDB = "author_record")
 @Entity
 public class AuthorRecord {
-
+ 
     public AuthorRecord(){}
 
     public AuthorRecord(Version v, String submissionId, String firstName, String lastName, String email, String country,
