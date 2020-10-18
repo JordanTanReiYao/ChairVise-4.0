@@ -15,7 +15,10 @@ public class ConferenceLogic {
     private final ConferenceRepository conferenceRepository;
 
     @Autowired
-    private EmailServiceLogic emailService;
+    private MailSenderHelper mailSenderHelper;
+
+    @Autowired
+    private MailContentBuilder mailContentBuilder;
     
     public ConferenceLogic(ConferenceRepository conferenceRepository) {
         this.conferenceRepository = conferenceRepository;
@@ -36,7 +39,8 @@ public class ConferenceLogic {
         newConference.setDate(conference.getDate());
         newConference.setCreatorIdentifier(userInfo.getUserEmail());
         // Send email
-        emailService.sendEmail("chairvise@gmail.com", "pewpewt97@gmail.com", "Created new conference, " + conference.getName());
+        String message = mailContentBuilder.generateMailContent(conference, userInfo);
+        mailSenderHelper.sendEmail("pewpewt97@gmail.com", "chairvise@gmail.com", "New Conference Added", message);
         return conferenceRepository.save(newConference);
     }
 
