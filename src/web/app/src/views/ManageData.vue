@@ -1,17 +1,16 @@
 <template>
   <div>
     <div><h2>Select the criteria below to specify dataset to display</h2>
-    <h2>THIS ONE IS {{authorVersionCount}}</h2>
-    <h2>THIS ONE IS</h2>
 <div id="vue-instance">
     <el-row type="flex" :gutter="16" align="middle" justify="center"> 
     <select class="form-control" @change="changeRecord($event)" dir="ltr">
     <option value="" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
     <option v-for="record in recordTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
   </select>
-  <br><br>   
-  <select class="form-control" @change="changeVersion($event)" dir="ltr">
-    <option value="" selected disabled style="text-align: middle;" dir="ltr">Record Version</option>
+  <br><br> 
+  
+  <select v-model="version" @change="changeVersion($event)" dir="ltr">
+    <option :value="null" select disabled style="text-align: middle;" dir="ltr">Record Version</option>
     <option v-for="record in versionList" :value="record.version" :key="record.id" style="text-align: middle;" dir="ltr">{{record.version}}</option>
   </select>
   <br><br>
@@ -27,84 +26,96 @@
       </el-row>
 
 </div>
-<div v-if="display">
-<h2>HWRBVFERJHVBEJ ERGFERGV {{recordType}}</h2>
-</div>
-  <v2-table :data="authorRecordz" v-if="displayAuthor" border=true stripe=true
-  :loading="loading" 
-    :total="total"
-    :shown-pagination="true"
-    :pagination-info="paginationInfo"
-    @page-change="handlePageChange">
-    <v2-table-column label="id" prop="id"></v2-table-column>
-    <v2-table-column label="version" prop="version"></v2-table-column>
-    <v2-table-column label="type" prop="type"></v2-table-column>
-    <v2-table-column label="submissionId" prop="submissionId"></v2-table-column>  
-    <v2-table-column label="firstName" prop="firstName"></v2-table-column>  
-    <v2-table-column label="lastName" prop="lastName"></v2-table-column>  
-    <v2-table-column label="email" prop="email"></v2-table-column>  
-    <v2-table-column label="country" prop="country"></v2-table-column>  
-    <v2-table-column label="organisation" prop="organisation"></v2-table-column> 
-    <v2-table-column label="webPage" prop="webPage"></v2-table-column> 
-    <v2-table-column label="personId" prop="personId"></v2-table-column> 
-    <v2-table-column label="isCorresponding" prop="isCorresponding"></v2-table-column> 
-  </v2-table>
 
-  <v2-table :data="reviewRecordz" v-if="displayReview" border=true stripe=true
-  :loading="loading" 
-    :total="total"
-    :shown-pagination="true"
-    :pagination-info="paginationInfo"
-    @page-change="handlePageChange">
-    <v2-table-column label="id" prop="id"></v2-table-column>
-    <v2-table-column label="version" prop="version"></v2-table-column>
-    <v2-table-column label="type" prop="type"></v2-table-column>
-    <v2-table-column label="submissionId" prop="submissionId"></v2-table-column>  
-    <v2-table-column label="reviewId" prop="reviewId"></v2-table-column>  
-    <v2-table-column label="numReviewAssignment" prop="numReviewAssignment"></v2-table-column> 
-    <v2-table-column label="reviewerName" prop="reviewerName"></v2-table-column>  
-    <v2-table-column label="expertiseLevel" prop="expertiseLevel"></v2-table-column>
-    <v2-table-column label="confidenceLevel" prop="confidenceLevel"></v2-table-column>  
-    <v2-table-column label="reviewComment" prop="reviewComment"></v2-table-column>  
-    <v2-table-column label="overallEvaluationScore" prop="overallEvaluationScore"></v2-table-column>  
-    <v2-table-column label="reviewSubmissionTime" prop="reviewSubmissionTime"></v2-table-column> 
-    <v2-table-column label="hasRecommendedForBestPaper" prop="hasRecommendedForBestPaper"></v2-table-column> 
-  </v2-table>
-
-  <v2-table :data="submissionRecordz" v-if="displaySubmissions" border=true stripe=true
-  :loading="loading" 
-    :total="total"
-    :shown-pagination="true"
-    :pagination-info="paginationInfo"
-    @page-change="handlePageChange">
-    <v2-table-column label="id" prop="id"></v2-table-column>
-    <v2-table-column label="version" prop="version"></v2-table-column>  
-    <v2-table-column label="submissionId" prop="submissionId"></v2-table-column>  
-    <v2-table-column label="trackId" prop="trackId"></v2-table-column>
-    <v2-table-column label="trackName" prop="trackName"></v2-table-column>
-    <v2-table-column label="title" prop="title"></v2-table-column>  
-    <v2-table-column label="authors" prop="authors"></v2-table-column> 
-    <v2-table-column label="submissionTime" prop="submissionTime"></v2-table-column>  
-    <v2-table-column label="lastUpdatedTime" prop="lastUpdatedTime"></v2-table-column>
-    <v2-table-column label="keywords" prop="keywords"></v2-table-column>  
-    <v2-table-column label="submissionAbstract" prop="submissionAbstract"></v2-table-column>  
-    <v2-table-column label="recordType" prop="recordType"></v2-table-column> 
-    <v2-table-column label="isAccepted" prop="isAccepted"></v2-table-column> 
-    <v2-table-column label="isNotified" prop="isNotified"></v2-table-column> 
-    <v2-table-column label="isReviewsSent" prop="isReviewsSent"></v2-table-column> 
-  </v2-table>
- <!-- 
-<template>
-  <div style="width: 10000px">
-    <vue-table-dynamic :params="params" ref="table"></vue-table-dynamic>
+<div class="ddtable" style="overflow-x:auto;" v-if="displayAuthor">
+  <table style="width:1000px"  class="dtable">
+    <thead>
+      <tr style="padding-left:5px; overflow: hidden">
+        <th >id</th>
+        <th >version</th>
+        <th >type</th>
+        <th >submissionId</th>
+        <th >firstName</th>
+        <th >lastName</th>
+        <th >email</th>
+        <th >country</th>
+        <th >organisation</th>
+        <th >webPage</th>
+        <th>personId</th>
+        <th >isCorresponding</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="record in computedUsers"  v-bind:key="record.id" style="padding-left:5px; overflow: hidden">
+        
+        <td>{{record.id}}</td>
+        <td>{{record.version}}</td>
+        <td>{{record.type}}</td>
+        <td >{{record.submissionId}}</td>
+        <td >{{record.firstName}}</td>
+        <td >{{record.lastName}}</td>
+        <td >{{record.email}}</td>
+        <td >{{record.country}}</td>
+        <td >{{record.organisation}}</td>
+        <td >{{record.webPage}}</td>
+        <td >{{record.personId}}</td>
+        <td >{{record.isCorresponding}}</td>
+      </tr>
+    </tbody>
+  </table>	
+       <ul>
+    <li v-for="n in numOfPages" v-bind:key="n"><a href="" @click.prevent="setPage(n)">{{n}}</a></li>
+  </ul>
   </div>
-</template>-->
+<div class="ddtable" style="overflow-x:auto;" v-if="displayReview">
+  <table style="width:1000px"  class="dtable">
+    <thead>
+      <tr style="padding-left:5px; overflow: hidden">
+        <th >id</th>
+        <th >version</th>
+        <th >type</th>
+        <th >submissionId</th>
+        <th >reviewId</th>
+        <th >numReviewAssignment</th>
+        <th >reviewerName</th>
+        <th >expertiseLevel</th>
+        <th >confidenceLevel</th>
+        <th >reviewComment</th>
+        <th>overallEvaluationScore</th>
+        <th >reviewSubmissionTime</th>
+        <th >hasRecommendedForBestPaper</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="record in computedUsers"  v-bind:key="record.id" style="padding-left:5px; overflow: hidden">
+        
+        <td>{{record.id}}</td>
+        <td>{{record.version}}</td>
+        <td>{{record.type}}</td>
+        <td >{{record.submissionId}}</td>
+        <td >{{record.reviewId}}</td>
+        <td >{{record.numReviewAssignment}}</td>
+        <td >{{record.reviewerName}}</td>
+        <td >{{record.expertiseLevel}}</td>
+        <td >{{record.confidenceLevel}}</td>
+        <td >{{record.reviewComment}}</td>
+        <td >{{record.overallEvaluationScore}}</td>
+        <td >{{record.reviewSubmissionTime}}</td>
+        <td >{{record.hasRecommendedForBestPaper}}</td>
+      </tr>
+    </tbody>
+  </table>	
+       <ul>
+    <li v-for="n in numOfPages" v-bind:key="n"><a href="" @click.prevent="setPage(n)">{{n}}</a></li>
+  </ul>
+  </div>
 <div class="ddtable" style="overflow-x:auto;" v-if="displaySubmission">
   <table style="width:1000px"  class="dtable">
     <thead>
       <tr style="padding-left:5px; overflow: hidden">
         <th >id</th>
         <th >version</th>
+        <th >type</th>
         <th >submissionId</th>
         <th >trackId</th>
         <th >trackName</th>
@@ -114,7 +125,6 @@
         <th >lastUpdatedTime</th>
         <th >keywords</th>
         <th>submissionAbstract</th>
-        <th >recordType</th>
         <th >isAccepted</th>
         <th >version</th>
         <th >isNotified</th>
@@ -126,6 +136,7 @@
         
         <td>{{record.id}}</td>
         <td>{{record.version}}</td>
+        <td >{{record.type}}</td>
         <td>{{record.submissionId}}</td>
         <td >{{record.trackId}}</td>
         <td >{{record.trackName}}</td>
@@ -135,7 +146,6 @@
         <td >{{record.lastUpdatedTime}}</td>
         <td >{{record.keywords}}</td>
         <td >{{record.submissionAbstract}}</td>
-        <td >{{record.recordType}}</td>
         <td >{{record.isAccepted}}</td>
         <td >{{record.version}}</td>
         <td >{{record.isNotified}}</td>
@@ -144,7 +154,7 @@
     </tbody>
   </table>	
        <ul>
-    <li v-for="n in numOfPages"><a href="" @click.prevent="setPage(n)">{{n}}</a></li>
+    <li v-for="n in numOfPages" v-bind:key="n"><a href="" @click.prevent="setPage(n)">{{n}}</a></li>
   </ul>
   </div>
 
@@ -204,6 +214,7 @@ Vue.use(V2Table);
     recordType: null, 
     version:null,
     apitest:null,
+    placeholder:null,
     startRow: 0,
     currentPage: 1,
     perPage: 20,
@@ -310,50 +321,38 @@ Vue.use(V2Table);
       keywords:v.keywords,submissionAbstract:v.submissionAbstract,version:v.version.versionId,
       recordType:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
       isReviewsSent:v.isReviewsSent}))));
-      //let submission1=submission[0];
-      //let aa=Object.keys(submission1);
-      //return aa;
-      //zz
-      /*let columns=Object.keys(submission[0]);
-      var yy=new Array();
-      yy.push(columns);
-      let jj=0;
-      for(var i in submission)
-          {let lister=[];
-          let count=0;
-          for (var tt in columns)
-          {lister.push(submission[i][columns[count]]);
-          count+=1;}
-          {yy.push(lister);
-              jj+=1;}}
-
-      return yy;*/
       return submission;
 
     },
     offset() {
-    	return ((this.currentPage - 1) * this.perPage);
+      return ((this.currentPage-1)*this.perPage);
     },
     limit() {
-    	return (this.offset + this.perPage);
+      return (this.offset+this.perPage);
     },
     numOfPages() {
-    	return Math.ceil(this.displayData.length / this.perPage);
+      return Math.ceil(this.displayData.length/this.perPage);
     },
     computedUsers() {
-      if (this.offset > this.displayData.length) {
-      	this.currentPage = this.numOfPages;
-      }
-    	return this.displayData.slice(this.offset, this.limit);
+      
+      return this.displayData.slice(this.offset,this.limit);
     }
       },
+    watch:{
+      computedpage() {
+      if (this.offset > this.displayData.length) {
+        this.currentPage = this.numOfPages;
+      }
+      //return this.displayData.slice(this.offset,this.limit);
+    }
+    },
     methods: {
        movePages: function(amount) {
       var newStartRow = this.startRow + (amount * this.rowsPerPage);
         this.startRow = newStartRow;
       }
     ,setPage(n) {
-    	this.currentPage = n;
+      this.currentPage = n;
     },
     
       loadBanner() {
@@ -391,12 +390,11 @@ Vue.use(V2Table);
       }
       if (this.recordType=="SubmissionRecord"){
         //this.displaySubmission=true;
-        this.$store.dispatch('getSubmissionRecordVersionList',"1")
-        this.testOnly=this.submissions;
-        this.displayData=this.submissions;
+        //this.$store.dispatch('getSubmissionRecordVersionList',"1")
+        //this.testOnly=this.submissions;
+        //this.displayData=this.submissions;
         this.versionList=this.submissionVersionCount;
       }
-      
     },
     changeVersion (event) {
       //this.user.address.record = event.target.value
@@ -417,7 +415,7 @@ Vue.use(V2Table);
         this.$store.dispatch('getAuthorRecordVersionList',this.version);
         //authorss=this.$store.state.record.AuthorRecordVersionList;
         //this.displayData = authorMapping(authorss);
-        this.authorRecordz=Array.from(new Set(this.$store.state.record.AuthorRecordVersionList.map(v => new Object({
+        this.displayData=Array.from(new Set(this.$store.state.record.AuthorRecordVersionList.map(v => new Object({
             id:v.id, version: v.version.versionId, type: v.version.recordType,submissionId:v.submissionId,
             firstName:v.firstName,lastName:v.lastName,email:v.email,
             country:v.country,organisation:v.organisation,webPage:v.webPage,
@@ -431,7 +429,7 @@ Vue.use(V2Table);
         this.$store.dispatch('getReviewRecordVersionList',this.version);
         //authorss=this.$store.state.record.AuthorRecordVersionList;
         //this.displayData = authorMapping(authorss);
-        this.reviewRecordz=Array.from(new Set(this.$store.state.record.ReviewRecordVersionList.map(v => new Object({id: v.id,
+        this.displayData=Array.from(new Set(this.$store.state.record.ReviewRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,reviewId:v.reviewId,numReviewAssignment:v.numReviewAssignment,
           reviewerName:v.reviewerName,expertiseLevel:v.expertiseLevel,confidenceLevel:v.confidenceLevel,
           reviewComment:v.reviewComment,overallEvaluationScore:v.overallEvaluationScore,
@@ -446,14 +444,14 @@ Vue.use(V2Table);
           this.displayReview=false;
           this.$store.dispatch('getSubmissionRecordVersionList',this.version);
 
-          this.submissionRecordz=Array.from(new Set(this.$store.state.record.SubmissionRecordVersionList.map(v => new Object({id: v.id,
+          this.displayData=Array.from(new Set(this.$store.state.record.SubmissionRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,trackId:v.trackId,trackName:v.trackName,title:v.title,
           authors:v.authors,submissionTime:v.submissionTime,lastUpdatedTime:v.lastUpdatedTime,
           keywords:v.keywords,submissionAbstract:v.submissionAbstract,version:v.version.versionId,
-          recordType:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
+          type:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
           isReviewsSent:v.isReviewsSent}))));
 
-          this.displayData=this.submissions;
+          //this.displayData=this.submissions;
           /*this.displayData=Array.from(new Set(this.$store.state.record.SubmissionRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,trackId:v.trackId,trackName:v.trackName,title:v.title,
           authors:v.authors,submissionTime:v.submissionTime,lastUpdatedTime:v.lastUpdatedTime,
@@ -493,8 +491,7 @@ Vue.use(V2Table);
         this.$store.dispatch('getAuthorRecordList'),
         this.$store.dispatch('getReviewRecordList'),
         this.$store.dispatch('getSubmissionRecordList'),
-        this.$store.dispatch('getReviewRecordVersionList',"1"),
-        this.$store.dispatch('getSubmissionRecordVersionList',"1")
+        //this.$store.dispatch('getAuthorRecordVersionList',"1"),
         ]).finally(() => {
         // using "finally" so even if there are errors, it stops "loading"
         this.loading = false})
@@ -508,6 +505,7 @@ Vue.use(V2Table);
 
         //this.displayData=this.authorRecords();
         },
+
     components: { VueTableDynamic,
     Vuetable,
     VuetablePagination,
@@ -523,6 +521,8 @@ Vue.use(V2Table);
 .el-button{
     height:50px;
     width:210px;
+    font-weight: bold;
+    font-size: 16px;
     margin-bottom:25px;
     background-color: midnightblue;
 }
@@ -561,7 +561,14 @@ h2{
     background-color: dodgerblue;
 }
 select {
-    text-align-last: center;
+  border-radius: 10px;
+  height:50px;
+  width:220px;
+  background-color:dodgerblue;
+  color:white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align-last: center;
 }
 
 option {
@@ -582,9 +589,9 @@ table,th,td,tr{
   border-collapse: collapse;
   width:auto;
 }
-table{
-  margin-left:13px;
-  margin-right:29px;
+table.dtable{
+  margin-left:auto;
+  margin-right:auto;
   
 }
 
