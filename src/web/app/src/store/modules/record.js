@@ -12,7 +12,7 @@ export default {
   },
   mutations: {
     
-    setAuthorRecordList(state, payload) {
+    setAuthorRecordList(state,payload){
       state.AuthorRecordList = payload;
     },
     setAuthorRecordVersionList(state,payload){
@@ -163,6 +163,6 @@ export default {
         .finally(() => {
           commit('setPresentationListLoading', false);
         })
-      }
     }
-};
+  }
+}

@@ -20,6 +20,10 @@
         <option v-for="record in conferenceTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
       </select>
     </el-row>
+    <el-row type="flex" :gutter="16" align="middle" justify="center">    
+      <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
+      <el-button type="primary" class="button" @click="deleteThem">Delete Data</el-button>
+    </el-row>
 
     <el-row type="flex" :gutter="16" align="middle" justify="center">    
       <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
