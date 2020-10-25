@@ -212,6 +212,7 @@
         }
       },
       submitMapping: function () {
+        this.$store.commit("setPageLoadingStatus", true);
         this.hasSubmitted = false;
         if (this.$store.state.dataMapping.data.isNewVersion) {
           this.$store.dispatch("persistMappingNewVersion");

@@ -13,3 +13,13 @@ export const filterPredefinedMap = (mappedIdArray, originalArray) => {
   }
   return result;
 };
+
+const convert_string = require("convert-string");
+export const anonymizeName = (original) => {
+  var bytes = convert_string.stringToBytes(original);
+  var anon = "";
+  for(var a=0;a<bytes.length;a++){
+      anon = anon.concat(String(bytes[a]+18));
+  }
+  return anon;
+};
