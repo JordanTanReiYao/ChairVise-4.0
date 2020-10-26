@@ -35,16 +35,34 @@ public class RecordController extends BaseRestController {
         return recordLogic.findAllAuthorForUser(currentUser);
     }
 
+    @GetMapping("/record/author/{version}")
+    public List<AuthorRecord> authorRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findAuthorByVersionForUser(currentUser,version);
+    }
+
     @GetMapping("/record/review")
     public List<ReviewRecord> ReviewRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
         return recordLogic.findAllReviewForUser(currentUser);
     }
 
+    @GetMapping("/record/review/{version}")
+    public List<ReviewRecord> ReviewRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findReviewByVersionForUser(currentUser,version);
+    }
+
     @GetMapping("/record/submission")
     public List<SubmissionRecord> SubmissionRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
         return recordLogic.findAllSubmissionForUser(currentUser);
+    }
+
+    @GetMapping("/record/submission/{version}")
+    public List<SubmissionRecord> SubmissionRecordByVersionList(@PathVariable String version){
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        return recordLogic.findSubmissionByVersionForUser(currentUser,version);
     }
 
     @PostMapping("/record/author")

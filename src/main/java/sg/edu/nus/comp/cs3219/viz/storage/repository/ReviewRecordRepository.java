@@ -13,6 +13,8 @@ public interface ReviewRecordRepository extends JpaRepository<ReviewRecord, Long
     
     List<ReviewRecord> findByVersion_IdDataSet(String dataSetVersion);
 
+    List<ReviewRecord> findByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(String user, String version);
+
     //void deleteAllByDataSetEquals(String dataSet);
     void deleteAllByVersionEquals(Version version);
 }
