@@ -9,6 +9,8 @@ import org.thymeleaf.context.Context;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Conference;
 
+import java.util.List;
+
 @Service
 public class MailContentBuilder {
 
@@ -27,5 +29,11 @@ public class MailContentBuilder {
         context.setVariable("conferenceDate", conference.getDate());
         
         return templateEngine.process("NewConference", context);
+    }
+
+    public String generateUpcomingConferencesContent(List<Conference> confList) {
+        Context context = new Context();
+        context.setVariable("confList", confList);
+        return templateEngine.process("UpcomingConferences", context);
     }
 }

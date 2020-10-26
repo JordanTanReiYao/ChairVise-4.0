@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>New Conference Email Template</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+
+    <!-- use the font -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+        }
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 5px;
+        }
+    </style>
+</head>
+ <body>
+    <p>Hey there!</p>
+    <p> You have the following conferences in the next 3 days. </p>
+    <p>
+      <img src="https://st.depositphotos.com/1056393/4876/i/450/depositphotos_48763103-stock-photo-speaker-at-business-conference-and.jpg" alt="sample conference img" height="246" width="600"/>
+    </p>
+    <table>
+      <tr>
+        <th>Conference Name</th>
+        <th>Description</th>
+        <th>Date</th>
+      </tr>
+      <tr th:each="conf:${confList}">
+        <td th:text="${conf.getName()}"></td>
+        <td th:text="${conf.getDescription()}"></td>
+        <td th:text="${#dates.format(conf.getDate(), 'dd MMM yyyy HH:mm')}"></td>
+      </tr>
+    </table>
+  </body>
+</html>
