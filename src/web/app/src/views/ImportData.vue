@@ -311,10 +311,33 @@
           var verId = this.$store.state.dataMapping.data.versionId;
           var element;
           var mapping;
+          var l;
 
           //author file preprocessing
           if( this.$store.state.dataMapping.data.tableType=="0" ){
-             //
+              // easychair
+              // generate predefinedMapping by headers instead of hard coded column numbers
+              let firstNameIdx;
+              let lastNameIdx;
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "author");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+                firstNameIdx = res2[0].indexOf("first name");
+                lastNameIdx = res2[0].indexOf("last name");
+
+              // softconf
+              } else if(this.$store.state.dataMapping.data.formatType=="2"){
+                mapping = generatePredefinedMapping(res2[0], "softconf", "author");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+                firstNameIdx = res2[0].indexOf("First Name");
+                lastNameIdx = res2[0].indexOf("Last Name");
+
+              }
+              // anonymize author names for both formats
+              for (l = 1; l < res2.length; l++) {
+                res2[l][firstNameIdx] = anonymizeName(res2[l][firstNameIdx]);
+                res2[l][lastNameIdx] = anonymizeName(res2[l][lastNameIdx]);
+              }
           }
 
           //review file preprocessing
@@ -370,7 +393,7 @@
               } else if(this.$store.state.dataMapping.data.formatType=="2"){
                 const acceptanceIdx = res2[0].indexOf("Acceptance Status");
                 const submissionDateIdx = res2[0].indexOf("Submission Date");
-                for (var l = 1; l < res2.length; l++) {
+                for (l = 1; l < res2.length; l++) {
                   res2[l][acceptanceIdx] = res2[l][acceptanceIdx].includes("Reject") ? "reject" : "accept";
                   res2[l][submissionDateIdx] = moment(res2[l][submissionDateIdx], "D MMM YYYY HH:mm:ss").format("YYYY-M-D H:mm");
                 }

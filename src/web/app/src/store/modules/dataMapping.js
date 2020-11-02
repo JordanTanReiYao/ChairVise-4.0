@@ -1,6 +1,5 @@
 import axios from 'axios'
 import {processMapping} from '@/store/helpers/processor.js'
-import {anonymizeName} from "@/common/utility"
 
 export default {
   state: {
@@ -62,6 +61,10 @@ export default {
     setFormatType(state, formatType) {
       state.data.formatType = formatType;
       state.hasFormatTypeSpecified = true;
+      if (formatType != "3") {
+        this.setHasHeader(state, true);
+        this.setPredefinedSwitch(state, true);
+      }
     },
 
     clearFormatType(state) {
@@ -159,15 +162,6 @@ export default {
 
     clearError(state) {
       state.error = [];
-    },
-
-    setAnonymizedNamesAuthorRecord(state){
-      var row;
-      for (var j=0; j<state.data.processedResult.length; j++){
-        row = state.data.processedResult[j];
-        row.firstName = anonymizeName(row.firstName);
-        row.lastName = anonymizeName(row.lastName);
-      }
     }
   },
 
@@ -199,12 +193,6 @@ export default {
         var row = state.data.processedResult[i];
         row.versionId = state.data.versionId;
       }
-
-      // for author records, anonymize first & last names
-      if (state.data.tableType == 0) {
-        commit("setAnonymizedNamesAuthorRecord");
-      }
-
 
       // concurrent POST data and POST version requests 
       axios.all([postTable(endpoint, state.data.processedResult), postVersion(fnKeyEntry)])  
@@ -239,12 +227,6 @@ export default {
         var row = state.data.processedResult[i];
         row.versionId = state.data.versionId;
       }
-
-      // for author records, anonymize first & last names
-      if (state.data.tableType == 0) {
-        commit("setAnonymizedNamesAuthorRecord");
-      }
-
 
       //console.log(state.data.processedResult);
       await axios.post("/api/record/" + endpoint, state.data.processedResult)
