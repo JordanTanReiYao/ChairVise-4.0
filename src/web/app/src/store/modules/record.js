@@ -32,7 +32,11 @@ export default {
     },
     setSubmissionRecordVersionList(state,payload){
       state.SubmissionRecordVersionList=payload;
-    }
+    },
+    deleteFromAuthorRecordVersionList(state, payload) {
+      const index = state.AuthorRecordVersionList.findIndex(Author => Author.Version.VersionId === payload);
+      state.AuthorRecordVersionList.splice(index, 1)
+  }
   },
   actions: {
     async getAuthorRecordList({commit}) {
@@ -112,6 +116,20 @@ export default {
             .finally(() => {
               commit('setPresentationListLoading', false);
             })
-      }
+      },
+      async deleteRecord({commit}, payload) {
+        commit('setConferenceFormLoading', true);
+        await axios.delete(`/api/record/author/${payload}`)
+          .then(() => {
+          commit('deleteFromAuthorRecordVersionList', payload);
+          //commit('resetConferenceForm')
+            })
+            .catch(e => {
+                commit('setConferenceFormApiError', e.toString());
+            })
+            .finally(() => {
+                commit('setConferenceFormLoading', false);
+            })
+    } 
     }
 };

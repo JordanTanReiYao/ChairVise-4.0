@@ -41,6 +41,15 @@ public class RecordController extends BaseRestController {
         return recordLogic.findAuthorByVersionForUser(currentUser,version);
     }
 
+    @DeleteMapping("/record/author/{version}")
+    public ResponseEntity<?> deleteConference(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        recordLogic.deleteByIdandVersion(currentUser,version);
+        return ResponseEntity.noContent().build();
+
+        //return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/record/review")
     public List<ReviewRecord> ReviewRecordVersionList(){
         UserInfo currentUser = gateKeeper.verifyLoginAccess();

@@ -21,8 +21,10 @@
   </select>
   
     </el-row>
-        <el-row type="flex" :gutter="16" align="middle" justify="center">    
+        <el-row type="flex" :gutter="16" align="middle" justify="center">
+    <notifications class="my-style" group="foo" position="top center"/>    
     <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
+    <el-button type="primary" class="button" @click="deleteRecord()">Delete Data</el-button>
       </el-row>
 
 </div>
@@ -177,6 +179,10 @@ import V2Table from 'v2-table';
 import Vuetable from 'vuetable-2';
 import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 Vue.use(Vuetable);
+import Toast from "vue-easy-toast";
+Vue.use(Toast);
+import Notifications from "vue-notification";
+Vue.use(Notifications);
 
 Vue.use(V2Table);
 
@@ -481,7 +487,36 @@ Vue.use(V2Table);
     },
     onChangePage (page) {
       this.$refs.vuetable.changePage(page)
-    }
+    },
+    deleteRecord() {
+        let check=1;
+        this.$store.dispatch('deleteRecord', this.version)
+        if (this.version==null && this.recordType==null && this.conference==null)
+        {
+            check=0;
+        }
+         /*this.$toast("Toast.",{
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+            
+        });*/
+        if (check==1){
+        this.$notify({
+          group: "foo",
+          title: "Important message",
+          text: "Records Deleted!",
+        })
+        window.location.reload()
+        }
+        else{
+          this.$notify({
+          group: "foo",
+          title: "Important message",
+          text: "Please specify record to delete!",
+        })
+
+        }
+      }
 
     },
   mounted() { 
@@ -610,6 +645,19 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
+.my-style {
+    height:90px;
+    font-size:30px;
+    text-align:center;
+
+}
+.notification-title {
+    text-align:center;
+  }
+.notification-text{
+  font-size:50px;
+    text-align:center;
+  }
 
 @import url(https://cdn.syncfusion.com/ej2/material.css);
 

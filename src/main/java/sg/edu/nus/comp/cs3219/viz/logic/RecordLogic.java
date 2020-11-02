@@ -47,6 +47,11 @@ public class RecordLogic {
         //return authorRecordRepository.findByVersion_IdVersionEquals(version);
     }
 
+    public void deleteByIdandVersion(UserInfo currentUser, String version){
+        //authorRecordRepository.deleteAllByVersion_IdVersionEquals(version);
+        authorRecordRepository.deleteAllByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(currentUser.getUserEmail(),version);
+    }
+
     public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){
         //return reviewRecordRepository.findAll();
         return reviewRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());
