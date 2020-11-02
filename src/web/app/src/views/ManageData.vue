@@ -3,8 +3,8 @@
     <div><h2>Select the criteria below to specify dataset to display</h2>
 <div id="vue-instance">
     <el-row type="flex" :gutter="16" align="middle" justify="center"> 
-    <select class="form-control" @change="changeRecord($event)" dir="ltr">
-    <option value="" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
+    <select v-model="recordType" @change="changeRecord($event)" dir="ltr">
+    <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
     <option v-for="record in recordTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
   </select>
   <br><br> 
@@ -14,9 +14,9 @@
     <option v-for="record in versionList" :value="record.version" :key="record.id" style="text-align: middle;" dir="ltr">{{record.version}}</option>
   </select>
   <br><br>
-  
-  <select class="form-control" @change="changeConference($event)" dir="ltr">
-    <option value="" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
+  <!--class="form-control"-->
+  <select v-model="conference" @change="changeConference($event)" dir="ltr">
+    <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
     <option v-for="record in conferenceTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
   </select>
   
@@ -401,6 +401,8 @@ Vue.use(V2Table);
         //this.displayData=this.submissions;
         this.versionList=this.submissionVersionCount;
       }
+      this.version=null;
+      this.conference=null;
     },
     changeVersion (event) {
       //this.user.address.record = event.target.value
@@ -490,32 +492,30 @@ Vue.use(V2Table);
     },
     deleteRecord() {
         let check=1;
-        this.$store.dispatch('deleteRecord', this.version)
-        if (this.version==null && this.recordType==null && this.conference==null)
+        if (this.version==null || this.recordType==null || this.conference==null)
         {
             check=0;
+            this.$notify({
+            group: "foo",
+            title: "Important message",
+            text: "Please specify record to delete!",
+        })
+            return
         }
          /*this.$toast("Toast.",{
           horizontalPosition: 'center',
           verticalPosition: 'top',
             
         });*/
-        if (check==1){
+        this.$store.dispatch('deleteRecord', this.version)
+        
         this.$notify({
           group: "foo",
           title: "Important message",
-          text: "Records Deleted!",
+          text: "Deleting Records!",
         })
         window.location.reload()
-        }
-        else{
-          this.$notify({
-          group: "foo",
-          title: "Important message",
-          text: "Please specify record to delete!",
-        })
-
-        }
+        
       }
 
     },
@@ -558,6 +558,7 @@ Vue.use(V2Table);
     width:210px;
     font-weight: bold;
     font-size: 16px;
+    margin:5px;
     margin-bottom:25px;
     background-color: midnightblue;
 }
@@ -604,6 +605,7 @@ select {
   font-size: 20px;
   font-weight: bold;
   text-align-last: center;
+  margin:5px;
 }
 
 option {
