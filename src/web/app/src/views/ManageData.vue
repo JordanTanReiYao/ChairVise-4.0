@@ -494,7 +494,7 @@ Vue.use(V2Table);
         //let check=1;
         if (this.version==null || this.recordType==null || this.conference==null)
         {
-            //check=0;
+            ///check=0;
             this.$notify({
             group: "foo",
             title: "Important message",
