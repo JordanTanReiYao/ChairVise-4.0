@@ -14,6 +14,18 @@ export const filterPredefinedMap = (mappedIdArray, originalArray) => {
   return result;
 };
 
+import allColumnHeaders from "@/store/data/columnHeaders"
+export const generatePredefinedMapping = (imported_headers, format, table) => {
+  const columnHeaders = allColumnHeaders[format][table];
+  const dbTagIndices = [];
+  const importedTagIndices = [];
+  for (let i = 0; i < columnHeaders.length; i++) {
+    dbTagIndices.push(i);
+    importedTagIndices.push(imported_headers.indexOf( columnHeaders[i] ));
+  }
+  return {dbTagIndices, importedTagIndices};
+}
+
 const convert_string = require("convert-string");
 export const anonymizeName = (original) => {
   var bytes = convert_string.stringToBytes(original);
