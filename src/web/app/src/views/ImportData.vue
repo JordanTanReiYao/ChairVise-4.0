@@ -360,26 +360,23 @@
            //ACL submission file processing
           else if( this.$store.state.dataMapping.data.tableType=="2" ){
 
+              // easychair
               // generate predefinedMapping by headers instead of hard coded column numbers
               if(this.$store.state.dataMapping.data.formatType=="1"){
                 mapping = generatePredefinedMapping(res2[0], "easychair", "submission");
                 this.$store.commit("setPredefinedMapping", {id: -1, mapping});
 
-
+              // softconf
               } else if(this.$store.state.dataMapping.data.formatType=="2"){
-              var submissionres=[];
-              submissionres.push(["#", "track #", "track name", "title", "authors", "submitted","last updated", "form fields", "keywords", "decision", "notified", "reviews sent", "abstract"]);
+                const acceptanceIdx = res2[0].indexOf("Acceptance Status");
+                const submissionDateIdx = res2[0].indexOf("Submission Date");
+                for (var l = 1; l < res2.length; l++) {
+                  res2[l][acceptanceIdx] = res2[l][acceptanceIdx].includes("Reject") ? "reject" : "accept";
+                  res2[l][submissionDateIdx] = moment(res2[l][submissionDateIdx], "D MMM YYYY HH:mm:ss").format("YYYY-M-D H:mm");
+                }
+                mapping = generatePredefinedMapping(res2[0], "softconf", "submission");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
 
-              for (var l = 1; l < res2.length; l++) {
-                var y = res2[l];
-                var dt = moment(y[10], "D MMM YYYY HH:mm:ss").format("YYYY-M-D H:m");
-                if(y[6].includes("Reject")){y[6]="reject";}
-                else {y[6]="accept";}
-                //console.log(x);
-                element=[y[0],"",y[4],y[2],y[3],dt,dt,"",y[13],y[6],"","",y[9], verId];
-                submissionres.push(element);
-              }
-                res2=submissionres;
               }
           }
 
