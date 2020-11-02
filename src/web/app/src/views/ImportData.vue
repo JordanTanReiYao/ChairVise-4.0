@@ -121,7 +121,7 @@
   import MappingTool from "@/components/MappingTool.vue";
   import Papa from "papaparse";
   import {REVIEW_DATE_DAY_FIELD, REVIEW_DATE_TIME_FIELD, REVIEW_TABLE_ID} from "@/common/const"
-  import {deepCopy, anonymizeName} from "@/common/utility"
+  import {deepCopy, anonymizeName, generatePredefinedMapping} from "@/common/utility"
   import PredefinedMappings from "@/store/data/predefinedMapping"
   import moment from "moment"
 
@@ -310,10 +310,11 @@
           var res2=res.data;
           var verId = this.$store.state.dataMapping.data.versionId;
           var element;
+          var mapping;
 
           //author file preprocessing
           if( this.$store.state.dataMapping.data.tableType=="0" ){
-
+             //
           }
 
           //review file preprocessing
@@ -358,7 +359,14 @@
 
            //ACL submission file processing
           else if( this.$store.state.dataMapping.data.tableType=="2" ){
-              if(this.$store.state.dataMapping.data.formatType=="2"){
+
+              // generate predefinedMapping by headers instead of hard coded column numbers
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "submission");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+
+
+              } else if(this.$store.state.dataMapping.data.formatType=="2"){
               var submissionres=[];
               submissionres.push(["#", "track #", "track name", "title", "authors", "submitted","last updated", "form fields", "keywords", "decision", "notified", "reviews sent", "abstract"]);
 
