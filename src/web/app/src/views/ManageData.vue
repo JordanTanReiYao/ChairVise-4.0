@@ -3,8 +3,8 @@
     <div><h2>Select the criteria below to specify dataset to display</h2>
 <div id="vue-instance">
     <el-row type="flex" :gutter="16" align="middle" justify="center"> 
-    <select class="form-control" @change="changeRecord($event)" dir="ltr">
-    <option value="" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
+    <select v-model="recordType" @change="changeRecord($event)" dir="ltr">
+    <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Record Type</option>
     <option v-for="record in recordTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
   </select>
   <br><br> 
@@ -14,15 +14,17 @@
     <option v-for="record in versionList" :value="record.version" :key="record.id" style="text-align: middle;" dir="ltr">{{record.version}}</option>
   </select>
   <br><br>
-  
-  <select class="form-control" @change="changeConference($event)" dir="ltr">
-    <option value="" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
+  <!--class="form-control"-->
+  <select v-model="conference" @change="changeConference($event)" dir="ltr">
+    <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
     <option v-for="record in conferenceTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
   </select>
   
     </el-row>
-        <el-row type="flex" :gutter="16" align="middle" justify="center">    
-    <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
+        <el-row type="flex" :gutter="16" align="middle" justify="center">
+    <notifications class="my-style" group="foo" position="top center"/>    
+    <el-button type="primary" class="button" @click="getThem">Retrieve Data</el-button>
+    <el-button type="primary" class="button" @click="deleteRecord()">Delete Data</el-button>
       </el-row>
 
 </div>
@@ -177,6 +179,10 @@ import V2Table from 'v2-table';
 import Vuetable from 'vuetable-2';
 import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 Vue.use(Vuetable);
+import Toast from "vue-easy-toast";
+Vue.use(Toast);
+import Notifications from "vue-notification";
+Vue.use(Notifications);
 
 Vue.use(V2Table);
 
@@ -395,6 +401,8 @@ Vue.use(V2Table);
         //this.displayData=this.submissions;
         this.versionList=this.submissionVersionCount;
       }
+      this.version=null;
+      this.conference=null;
     },
     changeVersion (event) {
       //this.user.address.record = event.target.value
@@ -407,6 +415,16 @@ Vue.use(V2Table);
       this.conference=event.target.value;
     },
     getThem(){
+        if (this.version==null || this.recordType==null || this.conference==null)
+        {
+            ///check=0;
+            this.$notify({
+            group: "foo",
+            title: "Important message",
+            text: "Please specify all criteria of record to retrieve!",
+        })
+            return
+        }
         if (this.recordType=="AuthorRecord")
         {
         this.displayAuthor=true;
@@ -481,7 +499,42 @@ Vue.use(V2Table);
     },
     onChangePage (page) {
       this.$refs.vuetable.changePage(page)
-    }
+    },
+    deleteRecord() {
+        //let check=1;
+        if (this.version==null || this.recordType==null || this.conference==null)
+        {
+            ///check=0;
+            this.$notify({
+            group: "foo",
+            title: "Important message",
+            text: "Please specify all criteria of record to delete!",
+        })
+            return
+        }
+         /*this.$toast("Toast.",{
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+            
+        });*/
+        if (this.recordType=="AuthorRecord"){
+        this.$store.dispatch('deleteAuthorRecord', this.version)
+        }
+        else if (this.recordType=="ReviewRecord"){
+        this.$store.dispatch('deleteReviewRecord', this.version)
+        }
+        else if (this.recordType=="SubmissionRecord"){
+        this.$store.dispatch('deleteSubmissionRecord', this.version)
+        }
+
+        this.$notify({
+          group: "foo",
+          title: "Important message",
+          text: "Deleting Records!",
+        })
+        window.location.reload()
+        
+      }
 
     },
   mounted() { 
@@ -523,6 +576,7 @@ Vue.use(V2Table);
     width:210px;
     font-weight: bold;
     font-size: 16px;
+    margin:5px;
     margin-bottom:25px;
     background-color: midnightblue;
 }
@@ -569,6 +623,7 @@ select {
   font-size: 20px;
   font-weight: bold;
   text-align-last: center;
+  margin:5px;
 }
 
 option {
@@ -610,6 +665,19 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
+.my-style {
+    height:90px;
+    font-size:30px;
+    text-align:center;
+
+}
+.notification-title {
+    text-align:center;
+  }
+.notification-text{
+  font-size:50px;
+    text-align:center;
+  }
 
 @import url(https://cdn.syncfusion.com/ej2/material.css);
 

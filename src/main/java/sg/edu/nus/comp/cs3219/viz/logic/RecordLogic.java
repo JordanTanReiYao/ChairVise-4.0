@@ -47,6 +47,21 @@ public class RecordLogic {
         //return authorRecordRepository.findByVersion_IdVersionEquals(version);
     }
 
+    public void deleteAuthorByIdandVersion(UserInfo currentUser, String version){
+        //authorRecordRepository.deleteAllByVersion_IdVersionEquals(version);
+        authorRecordRepository.deleteAllByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(currentUser.getUserEmail(),version);
+    }
+
+    public void deleteReviewByIdandVersion(UserInfo currentUser, String version){
+        //authorRecordRepository.deleteAllByVersion_IdVersionEquals(version);
+        reviewRecordRepository.deleteAllByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(currentUser.getUserEmail(),version);
+    }
+
+    public void deleteSubmissionByIdandVersion(UserInfo currentUser, String version){
+        //authorRecordRepository.deleteAllByVersion_IdVersionEquals(version);
+        submissionRecordRepository.deleteAllByVersion_IdDataSetEqualsAndVersion_IdVersionEquals(currentUser.getUserEmail(),version);
+    }
+
     public List<ReviewRecord> findAllReviewForUser(UserInfo currentUser){
         //return reviewRecordRepository.findAll();
         return reviewRecordRepository.findByVersion_IdDataSet(currentUser.getUserEmail());

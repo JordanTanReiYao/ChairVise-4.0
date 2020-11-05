@@ -22,6 +22,18 @@
           </zoom-x-transition>
           <zoom-x-transition :duration="500" :delay="600">
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
+              <el-card shadow="hover" class="feature-card">
+                <img src="@/assets/folder-management.png"/>
+                <p> View and delete the data you uploaded </p>
+              </el-card> 
+            </el-col>
+          </zoom-x-transition>
+          </el-row>
+          </div>
+          <div v-if="!isLogin">
+        <el-row type="flex" :gutter="16" align="middle" justify="center">
+          <zoom-x-transition :duration="500" :delay="600">
+            <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">                
                 <img src="@/assets/presentation.png"/>
                 <p> Generate various visualisation </p>
@@ -56,7 +68,7 @@
           <zoom-x-transition :duration="500" :delay="600">
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">
-                <img src="@/assets/dataIcon4.png"/>
+                <img src="@/assets/folder-management.png"/>
                 <el-button type="primary" class="button" @click="manageData">
                   Manage Data
                 </el-button>
@@ -137,7 +149,8 @@
     margin-bottom: 1.5rem;
   }
   .el-card {
-    margin: 0px;
+    margin: 5px;
+    margin-bottom:10px;
     text-align: center;
   }
   .el-button--text {

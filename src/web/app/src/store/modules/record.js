@@ -32,33 +32,32 @@ export default {
     },
     setSubmissionRecordVersionList(state,payload){
       state.SubmissionRecordVersionList=payload;
-    }
+    },
+    deleteFromAuthorRecordVersionList(state, payload) {
+      const index = state.AuthorRecordVersionList.findIndex(Author => Author.Version.VersionId === payload);
+      state.AuthorRecordVersionList.splice(index, 1)
+  },
+  deleteFromReviewRecordVersionList(state, payload) {
+    const index = state.ReviewRecordVersionList.findIndex(Review => Review.Version.VersionId === payload);
+    state.ReviewRecordVersionList.splice(index, 1)
+  },
+  deleteFromSubmissionRecordVersionList(state, payload) {
+    const index = state.SubmissionRecordVersionList.findIndex(Submission => Submission.Version.VersionId === payload);
+    state.SubmissionRecordVersionList.splice(index, 1)
+  }
   },
   actions: {
     async getAuthorRecordList({commit}) {
-        commit('setPresentationListLoading', true);
         axios.get('/api/record/author')
             .then(response => {
               commit('setAuthorRecordList', response.data)
             })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
-            })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
-            })
       },
       async getAuthorRecordVersionList({commit},version) {
-        commit('setPresentationListLoading', true);
+     
         axios.get(`/api/record/author/${version}`)
             .then(response => {
               commit('setAuthorRecordVersionList', response.data)
-            })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
-            })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
             })
       },
       async getReviewRecordList({commit}) {
@@ -67,51 +66,51 @@ export default {
             .then(response => {
               commit('setReviewRecordList', response.data)
             })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
-            })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
-            })
       },
       async getReviewRecordVersionList({commit},version) {
-        commit('setPresentationListLoading', true);
         axios.get(`/api/record/review/${version}`)
             .then(response => {
               commit('setReviewRecordVersionList', response.data)
             })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
-            })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
-            })
+            
       },
       async getSubmissionRecordList({commit}) {
-        commit('setPresentationListLoading', true);
+       
         axios.get('/api/record/submission')
             .then(response => {
               commit('setSubmissionRecordList', response.data)
             })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
-            })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
-            })
+            
       },
       async getSubmissionRecordVersionList({commit},version) {
-        commit('setPresentationListLoading', true);
         axios.get(`/api/record/submission/${version}`)
             .then(response => {
               commit('setSubmissionRecordVersionList', response.data)
             })
-            .catch(e => {
-              commit('setPresentationListApiError', e.toString());
+            
+      },
+      async deleteAuthorRecord({commit}, payload) {
+        await axios.delete(`/api/record/author/${payload}`)
+          .then(() => {
+          commit('deleteFromAuthorRecordVersionList', payload);
+          //commit('resetConferenceForm')
             })
-            .finally(() => {
-              commit('setPresentationListLoading', false);
-            })
-      }
+    }, 
+    async deleteReviewRecord({commit}, payload) {
+      await axios.delete(`/api/record/review/${payload}`)
+        .then(() => {
+        commit('deleteFromReviewRecordVersionList', payload);
+        //commit('resetConferenceForm')
+          })
+          
+    },
+    async deleteSubmissionRecord({commit}, payload) {
+      await axios.delete(`/api/record/submission/${payload}`)
+        .then(() => {
+        commit('deleteFromSubmissionRecordVersionList', payload);
+        //commit('resetConferenceForm')
+          })
+    }
+
     }
 };
