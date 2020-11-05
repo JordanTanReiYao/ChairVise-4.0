@@ -14,6 +14,7 @@
     <option v-for="record in versionList" :value="record.version" :key="record.id" style="text-align: middle;" dir="ltr">{{record.version}}</option>
   </select>
   <br><br>
+  <!--test-->
   <!--class="form-control"-->
   <select v-model="conference" @change="changeConference($event)" dir="ltr">
     <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
