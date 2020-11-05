@@ -42,9 +42,27 @@ public class RecordController extends BaseRestController {
     }
 
     @DeleteMapping("/record/author/{version}")
-    public ResponseEntity<?> deleteConference(@PathVariable String version) {
+    public ResponseEntity<?> deleteAuthor(@PathVariable String version) {
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        recordLogic.deleteByIdandVersion(currentUser,version);
+        recordLogic.deleteAuthorByIdandVersion(currentUser,version);
+        return ResponseEntity.noContent().build();
+
+        //return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/record/review/{version}")
+    public ResponseEntity<?> deleteReview(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        recordLogic.deleteReviewByIdandVersion(currentUser,version);
+        return ResponseEntity.noContent().build();
+
+        //return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/record/submission/{version}")
+    public ResponseEntity<?> deleteSubmission(@PathVariable String version) {
+        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        recordLogic.deleteSubmissionByIdandVersion(currentUser,version);
         return ResponseEntity.noContent().build();
 
         //return ResponseEntity.noContent().build();

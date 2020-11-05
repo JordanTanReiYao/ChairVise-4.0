@@ -23,7 +23,7 @@
     </el-row>
         <el-row type="flex" :gutter="16" align="middle" justify="center">
     <notifications class="my-style" group="foo" position="top center"/>    
-    <el-button type="primary" class="button" @click="getThem">Import Data</el-button>
+    <el-button type="primary" class="button" @click="getThem">Retrieve Data</el-button>
     <el-button type="primary" class="button" @click="deleteRecord()">Delete Data</el-button>
       </el-row>
 
@@ -415,6 +415,16 @@ Vue.use(V2Table);
       this.conference=event.target.value;
     },
     getThem(){
+        if (this.version==null || this.recordType==null || this.conference==null)
+        {
+            ///check=0;
+            this.$notify({
+            group: "foo",
+            title: "Important message",
+            text: "Please specify all criteria of record to retrieve!",
+        })
+            return
+        }
         if (this.recordType=="AuthorRecord")
         {
         this.displayAuthor=true;
@@ -498,7 +508,7 @@ Vue.use(V2Table);
             this.$notify({
             group: "foo",
             title: "Important message",
-            text: "Please specify record to delete!",
+            text: "Please specify all criteria of record to delete!",
         })
             return
         }
@@ -507,8 +517,16 @@ Vue.use(V2Table);
           verticalPosition: 'top',
             
         });*/
-        this.$store.dispatch('deleteRecord', this.version)
-        
+        if (this.recordType=="AuthorRecord"){
+        this.$store.dispatch('deleteAuthorRecord', this.version)
+        }
+        else if (this.recordType=="ReviewRecord"){
+        this.$store.dispatch('deleteReviewRecord', this.version)
+        }
+        else if (this.recordType=="SubmissionRecord"){
+        this.$store.dispatch('deleteSubmissionRecord', this.version)
+        }
+
         this.$notify({
           group: "foo",
           title: "Important message",
