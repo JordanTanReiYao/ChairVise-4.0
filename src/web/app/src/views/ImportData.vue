@@ -342,8 +342,12 @@
 
           //review file preprocessing
           else if( this.$store.state.dataMapping.data.tableType=="1" ){
+              //easychair
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "review");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
               //Softconf
-              if(this.$store.state.dataMapping.data.formatType=="2"){
+              } else if (this.$store.state.dataMapping.data.formatType=="2"){
                 var reviewres=[];
                 reviewres.push(["Review Id","Submission Id", "Num Review Assignment", "Reviewer Name", "Expertise Level", "Review Comment","Confidence Level", "Overall Evaluation Score", "Column 9","Column 10","Column 11","Column 12", "Day of the Review Date", "Time of the Review Date", "Has Recommended for the Best Paper"]);
 
