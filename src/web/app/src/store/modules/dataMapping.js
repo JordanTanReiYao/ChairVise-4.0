@@ -61,10 +61,6 @@ export default {
     setFormatType(state, formatType) {
       state.data.formatType = formatType;
       state.hasFormatTypeSpecified = true;
-      if (formatType != "3") {
-        this.setHasHeader(state, true);
-        this.setPredefinedSwitch(state, true);
-      }
     },
 
     clearFormatType(state) {

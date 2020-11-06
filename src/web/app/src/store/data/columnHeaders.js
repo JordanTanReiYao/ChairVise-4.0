@@ -1,4 +1,7 @@
 export default {
+    others: {
+        no_mapping: []
+    },
     easychair: {
         author: [
             "submission #", "first name", "last name", "email", "country", "organization", "Web page", "person #", "corresponding?"

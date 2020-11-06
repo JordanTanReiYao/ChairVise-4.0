@@ -20,9 +20,7 @@ export const generatePredefinedMapping = (imported_headers, format, table) => {
   const dbTagIndices = [];
   const importedTagIndices = [];
   for (let i = 0; i < columnHeaders.length; i++) {
-    if (columnHeaders[i] == null) {
-      // importedTagIndices.push(-1);
-    } else {
+    if (columnHeaders[i] != null) {
       dbTagIndices.push(i);
       importedTagIndices.push(imported_headers.indexOf( columnHeaders[i] ));
     }

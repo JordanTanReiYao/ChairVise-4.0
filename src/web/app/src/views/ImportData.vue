@@ -25,6 +25,7 @@
           <el-radio-group v-model="formatType" size="medium">
             <el-radio-button :label="1">EasyChair</el-radio-button>
             <el-radio-button :label="2">SoftConf</el-radio-button>
+            <el-radio-button :label="3">Others</el-radio-button>
           </el-radio-group>
         </div>
 
@@ -41,7 +42,7 @@
         </div>
       </div>
 
-      <div class="section" v-if="isReadyForChoosing">
+      <div class="section" v-if="isFormatTypeOthers">
         <h2>
           Mapping Information
 
@@ -62,13 +63,13 @@
           </el-switch>
         </div>
 
-        <div class="form-card" >
+        <!-- <div class="form-card" >
           <el-switch
             v-model="hasPredefined"
             active-text="Predefined Mapping"
             inactive-text="No Predefined Mapping">
           </el-switch>
-        </div> 
+        </div>  -->
       </div>
       
       <div class="section" v-if="isReadyForChoosing">
@@ -152,6 +153,13 @@
         },
         set: function (newValue) {
           this.$store.commit("setFormatType", newValue);
+          if (newValue != "3") {
+            this.$store.commit("setHasHeader", true);
+            this.$store.commit("setPredefinedSwitch", true);
+          } else {
+            this.$store.commit("setHasHeader", false);
+            this.$store.commit("setPredefinedSwitch", false);
+          }
         }
       },
       tableType: {
@@ -218,6 +226,10 @@
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
          && this.$store.state.dataMapping.hasVersionIdSpecified;
       },
+      isFormatTypeOthers: function() {
+        return this.$store.state.dataMapping.hasFormatTypeSpecified
+        && this.$store.state.dataMapping.data.formatType == "3";
+      },
       isReadyForChoosing: function () {
         return this.$store.state.dataMapping.hasTableTypeSelected;
       }
@@ -276,36 +288,19 @@
                             !verList.includes(this.$store.state.dataMapping.data.versionId));
         }
 
-        /*  tabletype 1	  1 - review 
-            tabletype 0	  2 - author
-            tabletype 2	  3 - sub */
-        // map sub to sub// rev to rev // author to author if predefined mapping specified
-        if (this.$store.state.dataMapping.data.hasPredefined) {
-            switch(this.$store.state.dataMapping.data.tableType) {
-              case 0:
-                this.$store.commit("setPredefinedMapping",
-                {id: 2, mapping: PredefinedMappings[2].mapping});
-                break;
-              case 1:
-                this.$store.commit("setPredefinedMapping",
-                {id: 1, mapping: PredefinedMappings[1].mapping});
-                break;
-              case 2:
-                this.$store.commit("setPredefinedMapping",
-                {id: 3, mapping: PredefinedMappings[3].mapping});
-                break;
-              default:
-            }
-        }
-        else {
-            this.$store.commit("setPredefinedMapping",
-             {id: 0, mapping: PredefinedMappings[0].mapping});
-        }
-
         Papa.parse(file.raw, {
           // ignoring empty lines in csv file
           skipEmptyLines: true,
           complete: function (result) {
+            // Other conference types
+            if(this.$store.state.dataMapping.data.formatType=="3"){
+              this.$store.commit("setUploadedFile",result.data);
+              this.$store.commit("setPageLoadingStatus", false);
+              mapping = generatePredefinedMapping(result.data[0], "others", "no_mapping");
+              this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+              return;
+            }
+
           var res=result;
           var res2=res.data;
           // var verId = this.$store.state.dataMapping.data.versionId;
@@ -383,8 +378,7 @@
             }
 
            //ACL submission file processing
-          else if( this.$store.state.dataMapping.data.tableType=="2" ){
-
+            else if( this.$store.state.dataMapping.data.tableType=="2" ){
               // easychair
               // generate predefinedMapping by headers instead of hard coded column numbers
               if(this.$store.state.dataMapping.data.formatType=="1"){
@@ -403,34 +397,8 @@
                 this.$store.commit("setPredefinedMapping", {id: -1, mapping});
 
               }
-          }
+            }
 
-          // if(this.$store.state.dataMapping.data.formatType=="1"){
-          //   var tempCSV=[];
-          //   //author
-          //   if( this.$store.state.dataMapping.data.tableType=="0" ){
-          //     tempCSV.push(["submission #","first name","last name","email","country","organization","Web page","person #","corresponding?"]);
-          //   }
-          //   //review
-          //   else if(this.$store.state.dataMapping.data.tableType=="1"){
-          //     tempCSV.push(["Review Id","Submission Id", "Num Review Assignment", "Reviewer Name", "Expertise Level", "Review Comment","Confidence Level", "Overall Evaluation Score", "Column 9","Column 10","Column 11","Column 12", "Day of the Review Date", "Time of the Review Date", "Has Recommended for the Best Paper"]);
-          //   }
-          //   //submission
-          //   else if(this.$store.state.dataMapping.data.tableType=="2"){
-          //     tempCSV.push(["#", "track #", "track name", "title", "authors", "submitted","last updated", "form fields", "keywords", "decision", "notified", "reviews sent", "abstract"]);
-          //   }
-          //   // for each row of data, manipulate temporary array element[] 
-          //   // then push to true array res2[] for parsing
-          //   var csvRow=[];
-          //   for (var rowNum = 1; rowNum < res2.length; rowNum++) {
-          //       csvRow = res2[rowNum];
-          //       //csvRow.push(verId);
-          //       tempCSV.push(csvRow);
-          //   }
-          //   res2=tempCSV;
-          // } else if(this.$store.state.dataMapping.data.formatType=="2"){ // softconf
-          // }
-            //console.log(res2);
             this.$store.commit("setUploadedFile",res2);
             this.$store.commit("setPageLoadingStatus", false);
           }.bind(this)
