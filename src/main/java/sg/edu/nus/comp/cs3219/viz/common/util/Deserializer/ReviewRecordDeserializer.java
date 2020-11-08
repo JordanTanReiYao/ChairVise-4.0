@@ -60,7 +60,8 @@ public class ReviewRecordDeserializer extends StdDeserializer<ReviewRecord> {
 
         JsonNode node = p.getCodec().readTree(p);
         String versionStr = getStrValueByField(node, "versionId");
-        Version version = new Version(new Version.VersionPK(null, null, versionStr));
+        String cmsType = getStrValueByField(node, "formatType");
+        Version version = new Version(new Version.VersionPK(null, null, versionStr, cmsType));
 
         String submissionId = getStrValueByField(node, "submissionId");
         String reviewId = getStrValueByField(node, "reviewId");

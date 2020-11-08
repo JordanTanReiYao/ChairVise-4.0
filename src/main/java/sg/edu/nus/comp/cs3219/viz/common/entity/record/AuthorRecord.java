@@ -43,6 +43,7 @@ public class AuthorRecord {
             @JoinColumn(name = "data_set", referencedColumnName = "data_set"),
             @JoinColumn(name = "record_type", referencedColumnName = "record_type"),
             @JoinColumn(name = "version", referencedColumnName = "version"),
+            @JoinColumn(name = "cms_type", referencedColumnName = "cms_type"),
     })
     private Version version;
 

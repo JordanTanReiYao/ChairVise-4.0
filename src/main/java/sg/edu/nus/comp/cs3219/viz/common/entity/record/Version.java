@@ -37,13 +37,16 @@ public class Version {
         private String recordType;
         @Column(name = "version")
         private String version;
+        @Column(name = "cms_type")
+        private String cmsType;
 
         public VersionPK(){}
 
-        public VersionPK(String dataSet, String recordType, String version){
+        public VersionPK(String dataSet, String recordType, String version, String cmsType){
             this.dataSet = dataSet;
             this.recordType = recordType;
             this.version = version;
+            this.cmsType = cmsType;
         }
 
         public String getRecordType(){return recordType;}
@@ -66,13 +69,21 @@ public class Version {
             this.dataSet = dataSet;
         }
 
+        public void setCMSType(String cmsType) {
+            this.cmsType = cmsType;
+        }
+
+        public String getCMSType() {
+            return cmsType;
+        }
+
         @Override
         public boolean equals(Object o){
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
             VersionPK that = (VersionPK) o;
-            return this.dataSet.equals(that.dataSet) && this.recordType.equals((that.recordType)) && (this.version == that.version);
+            return this.dataSet.equals(that.dataSet) && this.recordType.equals((that.recordType)) && (this.version == that.version) && (this.cmsType == that.cmsType);
         }
 
         @Override
