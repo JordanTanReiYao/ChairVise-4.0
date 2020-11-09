@@ -31,22 +31,34 @@ public class Version {
     @Embeddable
     public static class VersionPK implements Serializable{
 
-        @Column(name = "data_set")
+        @Column(name = "data_set ")
         private String dataSet;
         @Column(name = "record_type")
         private String recordType;
-        @Column(name = "version")
+        @Column(name = "version", length = 32)
         private String version;
-        @Column(name = "cms_type")
-        private String cmsType;
+        @Column(name = "format_type", length = 32)
+        private String formatType;
 
         public VersionPK(){}
 
-        public VersionPK(String dataSet, String recordType, String version, String cmsType){
+        public VersionPK(String dataSet, String recordType, String version, String formatType){
+            System.out.println("from VersionPK");
             this.dataSet = dataSet;
             this.recordType = recordType;
             this.version = version;
-            this.cmsType = cmsType;
+            switch (formatType) {
+                case "1":
+                this.formatType = "EasyChair";
+                break;
+                case "2":
+                this.formatType = "SoftConf";
+                break;
+            }
+            System.out.println("dataset: " + dataSet);
+            System.out.println("recordType: " + recordType);
+            System.out.println("version: " + version);
+            System.out.println("formatType: " + this.formatType);
         }
 
         public String getRecordType(){return recordType;}
@@ -69,12 +81,12 @@ public class Version {
             this.dataSet = dataSet;
         }
 
-        public void setCMSType(String cmsType) {
-            this.cmsType = cmsType;
+        public String getFormatType() {
+            return formatType;
         }
 
-        public String getCMSType() {
-            return cmsType;
+        public void setFormatType(String formatType) {
+            this.formatType = formatType;
         }
 
         @Override
@@ -83,12 +95,12 @@ public class Version {
             if (o == null || getClass() != o.getClass()) return false;
 
             VersionPK that = (VersionPK) o;
-            return this.dataSet.equals(that.dataSet) && this.recordType.equals((that.recordType)) && (this.version == that.version) && (this.cmsType == that.cmsType);
+            return this.dataSet.equals(that.dataSet) && this.recordType.equals((that.recordType)) && (this.version == that.version) && (this.formatType == that.formatType);
         }
 
         @Override
         public int hashCode(){
-            return Objects.hash(dataSet,recordType,version);
+            return Objects.hash(dataSet,recordType,version,formatType);
         }
     }
 }

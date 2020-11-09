@@ -31,8 +31,8 @@ public class VersionDeserializer extends StdDeserializer<Version> {
         String dataSet = null;
         String recordType = getStrValueByField(node, "recordType");
         String version = getStrValueByField(node, "versionId");
-        String cmsType = getStrValueByField(node, "formatType");
-     
-        return new Version(new Version.VersionPK(dataSet, recordType, version, cmsType));
+        String formatType = getStrValueByField(node, "formatType");
+        System.out.println("from VersionDeserializer");
+        return new Version(new Version.VersionPK(dataSet, recordType, version, formatType));
     }
 }

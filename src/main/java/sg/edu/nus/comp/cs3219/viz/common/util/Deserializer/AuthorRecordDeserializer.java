@@ -30,8 +30,9 @@ public class AuthorRecordDeserializer extends StdDeserializer<AuthorRecord> {
 
         JsonNode node = p.getCodec().readTree(p);
         String versionStr = getStrValueByField(node, "versionId");
-        String cmsType = getStrValueByField(node, "formatType");
-        Version version = new Version(new Version.VersionPK(null, null, versionStr, cmsType));
+        String formatType = getStrValueByField(node, "formatType");
+        System.out.println("from AuthorRecordDeserializer");
+        Version version = new Version(new Version.VersionPK(null, null, versionStr, formatType));
 
         String submissionId = getStrValueByField(node, "submissionId");
         String firstName = getStrValueByField(node,"firstName");

@@ -37,8 +37,8 @@ public class VersionController extends BaseRestController{
     @PostMapping("/version")
     public ResponseEntity<?> newVersion(@RequestBody Version version) throws URISyntaxException {
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
+        System.out.println("From VersionController: version equals = " + version.getId().toString());
         Version newVersion = versionLogic.saveForUser(version, currentUser);
-
         return ResponseEntity
                 // TODO: might change what URI is returned
                 .created(new URI("/version/" + newVersion.getId()))

@@ -141,12 +141,12 @@ public class SubmissionRecord {
     @Column(name = "s_submission_abstract", columnDefinition = "TEXT")
     private String submissionAbstract;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
             @JoinColumn(name = "data_set", referencedColumnName = "data_set"),
             @JoinColumn(name = "record_type", referencedColumnName = "record_type"),
             @JoinColumn(name = "version", referencedColumnName = "version"),
-            @JoinColumn(name = "cms_type", referencedColumnName = "cms_type"),
+            @JoinColumn(name = "format_type", referencedColumnName = "format_type"),
     })
     private Version version;
 

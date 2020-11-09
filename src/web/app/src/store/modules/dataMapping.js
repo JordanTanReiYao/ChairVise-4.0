@@ -182,12 +182,14 @@ export default {
       }
       var fnKeyEntry = {};
       fnKeyEntry.versionId = state.data.versionId;
+      fnKeyEntry.formatType = state.data.formatType;
       fnKeyEntry.recordType = fnKeyTable;
       
       // add version to end
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
         row.versionId = state.data.versionId;
+        row.formatType = state.data.formatType;
       }
 
       // concurrent POST data and POST version requests 
@@ -222,8 +224,10 @@ export default {
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
         row.versionId = state.data.versionId;
+        row.formatType = state.data.formatType;
+        console.log(row);
       }
-      //console.log(state.data.processedResult);
+      console.log(state.data.processedResult);
       await axios.post("/api/record/" + endpoint, state.data.processedResult)
         .then(() => {
           commit("setPageLoadingStatus", false);
