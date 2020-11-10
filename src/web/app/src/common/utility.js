@@ -14,7 +14,7 @@ export const filterPredefinedMap = (mappedIdArray, originalArray) => {
   return result;
 };
 
-import allColumnHeaders from "@/store/data/columnHeaders"
+import { allColumnHeaders } from "@/store/data/columnHeaders"
 export const generatePredefinedMapping = (imported_headers, format, table) => {
   const columnHeaders = allColumnHeaders[format][table];
   const dbTagIndices = [];
