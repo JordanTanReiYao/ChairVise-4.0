@@ -25,6 +25,7 @@
           <el-radio-group v-model="formatType" size="medium">
             <el-radio-button :label="1">EasyChair</el-radio-button>
             <el-radio-button :label="2">SoftConf</el-radio-button>
+            <el-radio-button :label="3">Others</el-radio-button>
           </el-radio-group>
         </div>
 
@@ -45,30 +46,36 @@
         <h2>
           Mapping Information
 
-          <el-tooltip placement="top">
-            <div slot="content">
-              Optional
-            </div>
-            <el-button type="text" icon="el-icon-info" circle></el-button>
-          </el-tooltip>
         </h2>
         <el-divider></el-divider>
+        <p v-if="!isFormatTypeOthers">
+          Note that the following column headers are expected to be in your csv file:
+        </p>
+        <p v-if="!isFormatTypeOthers">{{columnHeadersInfo}}</p>
 
-        <div class="form-card">
+        <div class="form-card" v-if="isFormatTypeOthers">
           <el-switch
             v-model="hasHeader"
             active-text="Has Header"
             inactive-text="No Header">
           </el-switch>
+
+          <el-tooltip placement="top" v-if="isFormatTypeOthers">
+            <div slot="content">
+              Optional
+            </div>
+            <el-button type="text" icon="el-icon-info" circle></el-button>
+          </el-tooltip>
+
         </div>
 
-        <div class="form-card" >
+        <!-- <div class="form-card" >
           <el-switch
             v-model="hasPredefined"
             active-text="Predefined Mapping"
             inactive-text="No Predefined Mapping">
           </el-switch>
-        </div> 
+        </div>  -->
       </div>
       
       <div class="section" v-if="isReadyForChoosing">
@@ -121,7 +128,8 @@
   import MappingTool from "@/components/MappingTool.vue";
   import Papa from "papaparse";
   import {REVIEW_DATE_DAY_FIELD, REVIEW_DATE_TIME_FIELD, REVIEW_TABLE_ID} from "@/common/const"
-  import {deepCopy} from "@/common/utility"
+  import {deepCopy, anonymizeName, generatePredefinedMapping} from "@/common/utility"
+  import { allColumnHeadersInfo } from "@/store/data/columnHeaders"
   import PredefinedMappings from "@/store/data/predefinedMapping"
   import moment from "moment"
 
@@ -152,6 +160,13 @@
         },
         set: function (newValue) {
           this.$store.commit("setFormatType", newValue);
+          if (newValue != "3") {
+            this.$store.commit("setHasHeader", true);
+            this.$store.commit("setPredefinedSwitch", true);
+          } else {
+            this.$store.commit("setHasHeader", false);
+            this.$store.commit("setPredefinedSwitch", false);
+          }
         }
       },
       tableType: {
@@ -218,8 +233,40 @@
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
          && this.$store.state.dataMapping.hasVersionIdSpecified;
       },
+      isFormatTypeOthers: function() {
+        return this.$store.state.dataMapping.hasFormatTypeSpecified
+        && this.$store.state.dataMapping.data.formatType == "3";
+      },
+      columnHeadersInfo: function() {
+        if (!this.$store.state.dataMapping.hasFormatTypeSpecified ||
+            !this.$store.state.dataMapping.hasTableTypeSelected ||
+            this.$store.state.dataMapping.data.formatType == "3") {
+              return "";
+        }
+        // easychair
+        if (this.$store.state.dataMapping.data.formatType == "1") {
+          if (this.$store.state.dataMapping.data.tableType == "0") {
+            return allColumnHeadersInfo["easychair"]["author"];
+          } else if (this.$store.state.dataMapping.data.tableType == "1") {
+            return allColumnHeadersInfo["easychair"]["review"];
+          } else if (this.$store.state.dataMapping.data.tableType == "2") {
+            return allColumnHeadersInfo["easychair"]["submission"];
+          }
+        // softconf
+        } else if (this.$store.state.dataMapping.data.formatType == "2") {
+          if (this.$store.state.dataMapping.data.tableType == "0") {
+            return allColumnHeadersInfo["softconf"]["author"];
+          } else if (this.$store.state.dataMapping.data.tableType == "1") {
+            return allColumnHeadersInfo["softconf"]["review"];
+          } else if (this.$store.state.dataMapping.data.tableType == "2") {
+            return allColumnHeadersInfo["softconf"]["submission"];
+          }
+        }
+        return "";
+      },
       isReadyForChoosing: function () {
-        return this.$store.state.dataMapping.hasTableTypeSelected;
+        return this.$store.state.dataMapping.hasTableTypeSelected &&
+            this.$store.state.dataMapping.hasFormatTypeSpecified;
       }
     },
     methods: {
@@ -276,174 +323,117 @@
                             !verList.includes(this.$store.state.dataMapping.data.versionId));
         }
 
-        /*  tabletype 1	  1 - review 
-            tabletype 0	  2 - author
-            tabletype 2	  3 - sub */
-        // map sub to sub// rev to rev // author to author if predefined mapping specified
-        if (this.$store.state.dataMapping.data.hasPredefined) {
-            switch(this.$store.state.dataMapping.data.tableType) {
-              case 0:
-                this.$store.commit("setPredefinedMapping",
-                {id: 2, mapping: PredefinedMappings[2].mapping});
-                break;
-              case 1:
-                this.$store.commit("setPredefinedMapping",
-                {id: 1, mapping: PredefinedMappings[1].mapping});
-                break;
-              case 2:
-                this.$store.commit("setPredefinedMapping",
-                {id: 3, mapping: PredefinedMappings[3].mapping});
-                break;
-              default:
-            }
-        }
-        else {
-            this.$store.commit("setPredefinedMapping",
-             {id: 0, mapping: PredefinedMappings[0].mapping});
-        }
-
         Papa.parse(file.raw, {
           // ignoring empty lines in csv file
           skipEmptyLines: true,
           complete: function (result) {
+            // Other conference types
+            if(this.$store.state.dataMapping.data.formatType=="3"){
+              this.$store.commit("setUploadedFile",result.data);
+              this.$store.commit("setPageLoadingStatus", false);
+              mapping = generatePredefinedMapping(result.data[0], "others", "no_mapping");
+              this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+              return;
+            }
+
           var res=result;
           var res2=res.data;
-          var verId = this.$store.state.dataMapping.data.versionId;
+          // var verId = this.$store.state.dataMapping.data.versionId;
+          // var element;
+          var mapping;
+          var l;
 
           //author file preprocessing
           if( this.$store.state.dataMapping.data.tableType=="0" ){
-              var authorres=[];
-              //ACL file preprocessing //Softconf
-              if(this.$store.state.dataMapping.data.formatType=="2"){
-              authorres.push(["submission #","first name","last name","email","country","organization","Web page","person #","corresponding?"]);
-              // for each row of data, manipulate temporary array element[] 
-              // then push to true array res2[] for parsing
-                for (var i = 1; i < res2.length; i++) {
-                  var x = res2[i];
-                  //console.log(x);
-                  var k=0,j=14,element=[],corr="",country="";
-                  while(x[j]!=""){
-                    if(x[j]==x[65] && x[j+1]==x[66]){
-                    corr = "yes";
-                    country=x[78];
-                    }
-                    else {
-                    corr="no";
-                    country="";
-                    }
-                    element[k]= [x[0],x[j],x[j+1],x[j+2],country,x[j+3],"","",corr, verId];
-                    authorres.push(element[k]);
-                    k+=1;
-                    j=14+k*5;
-                  }
-                //var element1=[x[0],x[14],x[15],x[16],"",x[17],"",""];
-                }
-                res2=authorres;
-                //console.log(authorres)
-              }
+              // easychair
+              // generate predefinedMapping by headers instead of hard coded column numbers
+              let firstNameIdx;
+              let lastNameIdx;
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "author");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+                firstNameIdx = res2[0].indexOf("first name");
+                lastNameIdx = res2[0].indexOf("last name");
 
-              //author anonymization - Both formats
-              var convertstring=require("convert-string");
-              for(var m=1;m<res2.length;m++){
-                  var conv1=convertstring.stringToBytes(res2[m][1]);
-                  var conv2=convertstring.stringToBytes(res2[m][2]);
-                  var firstname="";
-                  var lastname="";
-                  for(var a=0;a<conv1.length;a++){
-                      firstname=firstname.concat(String(conv1[a]+18));
-                  }
-                  for(var w=0;w<conv2.length;w++){
-                      lastname=lastname.concat(String(conv2[w]+18));
-                  }
-                  res2[m][1]=firstname;
-                  res2[m][2]=lastname;
+              // softconf
+              } else if(this.$store.state.dataMapping.data.formatType=="2"){
+                mapping = generatePredefinedMapping(res2[0], "softconf", "author");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
+                firstNameIdx = res2[0].indexOf("First Name");
+                lastNameIdx = res2[0].indexOf("Last Name");
+
               }
-              //console.log(res2);
-           }
+              // anonymize author names for both formats
+              for (l = 1; l < res2.length; l++) {
+                res2[l][firstNameIdx] = anonymizeName(res2[l][firstNameIdx]);
+                res2[l][lastNameIdx] = anonymizeName(res2[l][lastNameIdx]);
+              }
+          }
 
           //review file preprocessing
           else if( this.$store.state.dataMapping.data.tableType=="1" ){
+              //easychair
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "review");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
               //Softconf
-              if(this.$store.state.dataMapping.data.formatType=="2"){
-                var reviewres=[];
-                reviewres.push(["Review Id","Submission Id", "Num Review Assignment", "Reviewer Name", "Expertise Level", "Review Comment","Confidence Level", "Overall Evaluation Score", "Column 9","Column 10","Column 11","Column 12", "Day of the Review Date", "Time of the Review Date", "Has Recommended for the Best Paper"]);
-
-                for (var q = 1; q < res2.length; q++) {
-                    var z = res2[q];
-                    z[32]="confidence: "+z[32];
-                    //console.log(typeof(z[7]));
-                    //var str=z[7].toString();
-                    var date_time=z[7].split(" ");
-                    //console.log(date_time);
-                    var date=date_time[0];
-                    var time=date_time[1].split(":")[0]+":"+date_time[1].split(":")[1];
-                    //console.log(date,time);
-                    element=["",z[0],"","","",z[38],z[32],z[31],"","","","",date,time,"",verId];
-                    reviewres.push(element);
+              } else if (this.$store.state.dataMapping.data.formatType=="2"){
+                res2[0].push("Reviewer Full Name (generated by chairvise)");
+                res2[0].push("Latest Modification Date (generated by chairvise)");
+                res2[0].push("Latest Modification Time (generated by chairvise)");
+                var firstNameIdx = res2[0].indexOf("Reviewer First Name");
+                var lastNameIdx = res2[0].indexOf("Reviewer Last Name");
+                var timeIdx = res2[0].indexOf("Latest Modification Time");
+                var date_time, date, time, name;
+                for (l = 1; l < res2.length; l++) {
+                    name = res2[l][firstNameIdx] + " " + res2[l][lastNameIdx];
+                    date_time = res2[l][timeIdx].split(" ");
+                    date=date_time[0];
+                    time=date_time[1].split(":")[0]+":"+date_time[1].split(":")[1];
+                    res2[l].push(name); res2[l].push(date); res2[l].push(time);
                 }
-                res2=reviewres;
-                //console.log(reviewres);
+                mapping = generatePredefinedMapping(res2[0], "softconf", "review");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
               }
 
               //author anonymization - JCDL
               // Easy Chair
               else if(this.$store.state.dataMapping.data.formatType=="1"){
-                var convert_string=require("convert-string");
+                // var convert_string=require("convert-string");
                 for(var index=1;index<res2.length;index++){
-                    var convert=convert_string.stringToBytes(res2[index][3]);
-                    var name="";
-                    for(var idx=0;idx<convert.length;idx++){
-                        name=name.concat(String(convert[idx]+18));
-                    }
-                    res2[index][3]=name;
+                    // var convert=convert_string.stringToBytes(res2[index][3]);
+                    // var name="";
+                    // for(var idx=0;idx<convert.length;idx++){
+                    //     name=name.concat(String(convert[idx]+18));
+                    // }
+                    // res2[index][3]=name;
+                    res2[index][3] = anonymizeName(res2[index][3]);
                 }
               }
             }
 
            //ACL submission file processing
-          else if( this.$store.state.dataMapping.data.tableType=="2" ){
-              if(this.$store.state.dataMapping.data.formatType=="2"){
-              var submissionres=[];
-              submissionres.push(["#", "track #", "track name", "title", "authors", "submitted","last updated", "form fields", "keywords", "decision", "notified", "reviews sent", "abstract"]);
+            else if( this.$store.state.dataMapping.data.tableType=="2" ){
+              // easychair
+              // generate predefinedMapping by headers instead of hard coded column numbers
+              if(this.$store.state.dataMapping.data.formatType=="1"){
+                mapping = generatePredefinedMapping(res2[0], "easychair", "submission");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
 
-              for (var l = 1; l < res2.length; l++) {
-                var y = res2[l];
-                var dt = moment(y[10], "D MMM YYYY HH:mm:ss").format("YYYY-M-D H:m");
-                if(y[6].includes("Reject")){y[6]="reject";}
-                else {y[6]="accept";}
-                //console.log(x);
-                element=[y[0],"",y[4],y[2],y[3],dt,dt,"",y[13],y[6],"","",y[9], verId];
-                submissionres.push(element);
-              }
-                res2=submissionres;
-              }
-          }
+              // softconf
+              } else if(this.$store.state.dataMapping.data.formatType=="2"){
+                const acceptanceIdx = res2[0].indexOf("Acceptance Status");
+                const submissionDateIdx = res2[0].indexOf("Submission Date");
+                for (l = 1; l < res2.length; l++) {
+                  res2[l][acceptanceIdx] = res2[l][acceptanceIdx].includes("Reject") ? "reject" : "accept";
+                  res2[l][submissionDateIdx] = moment(res2[l][submissionDateIdx], "D MMM YYYY HH:mm:ss").format("YYYY-M-D H:mm");
+                }
+                mapping = generatePredefinedMapping(res2[0], "softconf", "submission");
+                this.$store.commit("setPredefinedMapping", {id: -1, mapping});
 
-          if(this.$store.state.dataMapping.data.formatType=="1"){
-            var tempCSV=[];
-            //author
-            if( this.$store.state.dataMapping.data.tableType=="0" ){
-              tempCSV.push(["submission #","first name","last name","email","country","organization","Web page","person #","corresponding?"]);
+              }
             }
-            //review
-            else if(this.$store.state.dataMapping.data.tableType=="1"){
-              tempCSV.push(["Review Id","Submission Id", "Num Review Assignment", "Reviewer Name", "Expertise Level", "Review Comment","Confidence Level", "Overall Evaluation Score", "Column 9","Column 10","Column 11","Column 12", "Day of the Review Date", "Time of the Review Date", "Has Recommended for the Best Paper"]);
-            }
-            //submission
-            else if(this.$store.state.dataMapping.data.tableType=="2"){
-              tempCSV.push(["#", "track #", "track name", "title", "authors", "submitted","last updated", "form fields", "keywords", "decision", "notified", "reviews sent", "abstract"]);
-            }
-            // for each row of data, manipulate temporary array element[] 
-            // then push to true array res2[] for parsing
-            var csvRow=[];
-            for (var rowNum = 1; rowNum < res2.length; rowNum++) {
-                csvRow = res2[rowNum];
-                //csvRow.push(verId);
-                tempCSV.push(csvRow);
-            }
-            res2=tempCSV;
-          }
-            //console.log(res2);
+
             this.$store.commit("setUploadedFile",res2);
             this.$store.commit("setPageLoadingStatus", false);
           }.bind(this)

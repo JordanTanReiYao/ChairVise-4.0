@@ -223,6 +223,7 @@ export default {
         var row = state.data.processedResult[i];
         row.versionId = state.data.versionId;
       }
+
       //console.log(state.data.processedResult);
       await axios.post("/api/record/" + endpoint, state.data.processedResult)
         .then(() => {

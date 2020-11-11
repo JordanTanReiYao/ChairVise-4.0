@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {anonymizeName} from "../../common/utility"
 
 function processDouble(raw) {
   if (!isNaN(parseFloat(raw))) {
@@ -125,26 +126,19 @@ export function processMapping(mapping, data, dbFields, hasLabel) {
 
 
 
-        var convertstring=require("convert-string");
         for (var key in rawData){
             var author=rawData[key];
             let name=author.split(" ");
             var concatname="";
             for (var itemkey in name){
-                var conv=convertstring.stringToBytes(name[itemkey]);
-                var itemconv="";
-                for(var a=0;a<conv.length;a++){
-                    itemconv=itemconv.concat(String(conv[a]+18));
-                }
-                name[itemkey]=itemconv;
-                concatname=concatname.concat(itemconv);
+                concatname=concatname.concat(anonymizeName(name[itemkey]));
                 concatname=concatname.concat(" ");
             }
             //concatname.trim();
             //console.log(concatname);
             rawData[key]=concatname;
          }
-         rawData = rawData.map(author => author.trim());
+         rawData = rawData.map(author => author.trim().slice(0, 255)); // database can only store varchar(255)
 
          //console.log(rawData);
 
