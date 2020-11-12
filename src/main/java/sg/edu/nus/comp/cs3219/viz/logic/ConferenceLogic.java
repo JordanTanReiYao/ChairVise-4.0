@@ -93,7 +93,7 @@ public class ConferenceLogic {
         newConference.setCreatorIdentifier(userInfo.getUserEmail());
         // Send email
         String message = mailContentBuilder.generateMailContent(conference, userInfo);
-        mailSenderHelper.sendEmail("pewpewt97@gmail.com", "chairvise@gmail.com", "New Conference Added", message);
+        mailSenderHelper.sendEmail(userInfo.getUserEmail(), "chairvise@gmail.com", "New Conference Added", message);
         return conferenceRepository.save(newConference);
     }
 
