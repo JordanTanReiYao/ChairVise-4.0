@@ -14,8 +14,6 @@
     <option v-for="record in versionList" :value="record.version" :key="record.id" style="text-align: middle;" dir="ltr">{{record.version}}</option>
   </select>
   <br><br>
-  <!--test-->
-  <!--class="form-control"-->
   <select v-model="conference" @change="changeConference($event)" dir="ltr">
     <option :value="null" selected disabled style="text-align: middle;" dir="ltr">Conference</option>
     <option v-for="record in conferenceTypeData" :value="record.Type" :key="record.id" style="text-align: middle;" dir="ltr">{{record.Type}}</option>
@@ -171,21 +169,11 @@
 
 <script>
 import Vue from 'vue';
-Vue.use(DropDownListPlugin);
-import  {DropDownListPlugin} from '@syncfusion/ej2-vue-dropdowns';
-import VueTableDynamic from 'vue-table-dynamic';
-import 'beautify-scrollbar/dist/index.css'; 
-import 'v2-table/dist/index.css'; 
-import V2Table from 'v2-table';
-import Vuetable from 'vuetable-2';
-import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
-Vue.use(Vuetable);
-import Toast from "vue-easy-toast";
-Vue.use(Toast);
+
 import Notifications from "vue-notification";
 Vue.use(Notifications);
 
-Vue.use(V2Table);
+
 
   export default {
     name: 'ManageData',
@@ -270,9 +258,6 @@ Vue.use(V2Table);
         return authorCount;
 
     },
-    testing(){
-      return 2345;
-    },
     
     reviewVersionCount(){
         let reviewCount = Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => new Object({version: v.version.versionId, type: v.version.recordType}))));
@@ -350,7 +335,6 @@ Vue.use(V2Table);
       if (this.offset > this.displayData.length) {
         this.currentPage = this.numOfPages;
       }
-      //return this.displayData.slice(this.offset,this.limit);
     }
     },
     methods: {
@@ -367,7 +351,6 @@ Vue.use(V2Table);
       },
       
       authorVersionsSize() {
-        //let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => new Object({version: v.version.versionId, id: v.id}))));
         let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => new Object({version: v.version.versionId, type: v.version.recordType}))));
     
         function unique(arr, keyProps) {
@@ -386,8 +369,7 @@ Vue.use(V2Table);
       },
 
       changeRecord (event) {
-      //this.user.address.record = event.target.value
-      //this.selectedrecord = event.target.options[event.target.options.selectedIndex].text
+      
       this.recordType = event.target.value;
       if (this.recordType=="AuthorRecord"){
         this.versionList=this.authorVersionCount;
@@ -396,29 +378,24 @@ Vue.use(V2Table);
         this.versionList=this.reviewVersionCount;
       }
       if (this.recordType=="SubmissionRecord"){
-        //this.displaySubmission=true;
-        //this.$store.dispatch('getSubmissionRecordVersionList',"1")
-        //this.testOnly=this.submissions;
-        //this.displayData=this.submissions;
+        
         this.versionList=this.submissionVersionCount;
       }
+
       this.version=null;
       this.conference=null;
     },
     changeVersion (event) {
-      //this.user.address.record = event.target.value
-      //this.selectedrecord = event.target.options[event.target.options.selectedIndex].text
       this.version=event.target.value;
     },
     changeConference (event) {
-      //this.user.address.record = event.target.value
-      //this.selectedrecord = event.target.options[event.target.options.selectedIndex].text
+      
       this.conference=event.target.value;
     },
     getThem(){
         if (this.version==null || this.recordType==null || this.conference==null)
         {
-            ///check=0;
+            
             this.$notify({
             group: "foo",
             title: "Important message",
@@ -432,8 +409,7 @@ Vue.use(V2Table);
         this.displayReview=false;
         this.displaySubmission=false;
         this.$store.dispatch('getAuthorRecordVersionList',this.version);
-        //authorss=this.$store.state.record.AuthorRecordVersionList;
-        //this.displayData = authorMapping(authorss);
+        
         this.displayData=Array.from(new Set(this.$store.state.record.AuthorRecordVersionList.map(v => new Object({
             id:v.id, version: v.version.versionId, type: v.version.recordType,submissionId:v.submissionId,
             firstName:v.firstName,lastName:v.lastName,email:v.email,
@@ -446,8 +422,7 @@ Vue.use(V2Table);
         this.displayReview=true;
         this.displaySubmission=false;
         this.$store.dispatch('getReviewRecordVersionList',this.version);
-        //authorss=this.$store.state.record.AuthorRecordVersionList;
-        //this.displayData = authorMapping(authorss);
+        
         this.displayData=Array.from(new Set(this.$store.state.record.ReviewRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,reviewId:v.reviewId,numReviewAssignment:v.numReviewAssignment,
           reviewerName:v.reviewerName,expertiseLevel:v.expertiseLevel,confidenceLevel:v.confidenceLevel,
@@ -470,13 +445,6 @@ Vue.use(V2Table);
           type:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
           isReviewsSent:v.isReviewsSent}))));
 
-          //this.displayData=this.submissions;
-          /*this.displayData=Array.from(new Set(this.$store.state.record.SubmissionRecordVersionList.map(v => new Object({id: v.id,
-          submissionId: v.submissionId,trackId:v.trackId,trackName:v.trackName,title:v.title,
-          authors:v.authors,submissionTime:v.submissionTime,lastUpdatedTime:v.lastUpdatedTime,
-          keywords:v.keywords,submissionAbstract:v.submissionAbstract,version:v.version.versionId,
-          recordType:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
-          isReviewsSent:v.isReviewsSent}))));*/
           }
     },
     handlePageChange(page) {
@@ -502,10 +470,10 @@ Vue.use(V2Table);
       this.$refs.vuetable.changePage(page)
     },
     deleteRecord() {
-        //let check=1;
+        
         if (this.version==null || this.recordType==null || this.conference==null)
         {
-            ///check=0;
+            
             this.$notify({
             group: "foo",
             title: "Important message",
@@ -513,11 +481,7 @@ Vue.use(V2Table);
         })
             return
         }
-         /*this.$toast("Toast.",{
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-            
-        });*/
+         
         if (this.recordType=="AuthorRecord"){
         this.$store.dispatch('deleteAuthorRecord', this.version)
         }
@@ -539,31 +503,23 @@ Vue.use(V2Table);
 
     },
   mounted() { 
-        //this.loadBanner();
+        
         Promise.all([
-        //this.$store.dispatch('getConferenceList'),
         this.$store.dispatch('getAuthorRecordList'),
         this.$store.dispatch('getReviewRecordList'),
         this.$store.dispatch('getSubmissionRecordList'),
-        //this.$store.dispatch('getAuthorRecordVersionList',"1"),
+        
         ]).finally(() => {
-        // using "finally" so even if there are errors, it stops "loading"
+        
         this.loading = false})
-        //this.testData=this.testVerionsSize();
-        //this.testData=this.authorRecordByVersion();
-        //this.testData=this.authorVersionsSize() ;
-        //this.authorRecordz=this.authorRecords();
+        
         this.loadBanner();
         this.apitest=this.submissions;
         this.params.data=this.submissions;
 
-        //this.displayData=this.authorRecords();
         },
 
-    components: { VueTableDynamic,
-    Vuetable,
-    VuetablePagination,
-    'vuetable-pagination': Vuetable.VuetablePagination }
+    
 
     
   }
