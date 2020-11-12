@@ -6,9 +6,6 @@
           <el-col :span="6">
             <img alt="Vue logo" class="logo" src="@/assets/chair2.png"/>
           </el-col>
-          <!--<el-col :span="15">
-            <h2 class='title'> ChairVisE -- The Conference Data Visualisation Management System </h2>
-          </el-col>-->
           <el-col :span="10">
           <h3 class="greeting">Good Day {{userNickname}}!</h3>
           <el-card :body-style="{ padding: '0px', height:'78px'  }">
@@ -70,9 +67,6 @@
     props: {
       msg: String
     },
-    /*mounted() {
-      this.loadBanner();
-    },*/
     methods: {
       loadBanner() {
         this.show = true;
@@ -87,29 +81,22 @@
       },
       authorVersionsSize() {
         let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
-        //let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
-        //let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
-        return authorCount//+reviewCount+submissionCount;
+
+        return authorCount
       },
       reviewVersionsSize() {
-        //let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
         let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
-        //let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
-        return reviewCount//+submissionCount;
+        return reviewCount
       },
       submissionVersionsSize() {
-        //let authorCount = Array.from(new Set(this.$store.state.record.AuthorRecordList.map(v => v.version.versionId))).length;
-        //let reviewCount =  Array.from(new Set(this.$store.state.record.ReviewRecordList.map(v => v.version.versionId))).length;
         let submissionCount =  Array.from(new Set(this.$store.state.record.SubmissionRecordList.map(v => v.version.versionId))).length;
         return submissionCount;
       },
       upcomingConferenceTitle() {
             
             let list = this.$store.state.conference.conferenceList;
-            /*var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds*/
-            /*let newList = [];*/
+          
             let now = new Date();
-            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
             let closestEvent=Object;
             list.forEach(function(element) {
@@ -125,17 +112,14 @@
         },
         upcomingConferenceStart() {
             let list = this.$store.state.conference.conferenceList;
-            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            var tzoffset = (new Date()).getTimezoneOffset() * 60000; 
             
             let now = new Date();
-            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
-            /*let closestEvent=Object;*/
             list.forEach(function(element) {
             let date = new Date(element.date);
             
             if (date > now && (date <= new Date(closest) || date <= closest)) {
-                  /*closestEvent = element;*/
                   closest=new Date(date);
                   
             }});
@@ -147,18 +131,14 @@
         },
         upcomingConferenceExists() {
             let list = this.$store.state.conference.conferenceList;
-            /*var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds*/
             
             let now = new Date();
-            /*var MAX_TIMESTAMP = 8640000000000000;*/
             let closest=Infinity;
-            /*let closestEvent=Object;*/
             let counter=0;
             list.forEach(function(element) {
             let date = new Date(element.date);
             
             if (date > now && (date <= new Date(closest) || date <= closest)) {
-                  /*closestEvent = element;*/
                   closest=new Date(date);
                   counter=counter+1;
             }});
@@ -184,14 +164,12 @@
         this.$store.dispatch('getReviewRecordList'),
         this.$store.dispatch('getSubmissionRecordList'),
         ]).finally(() => {
-        // using "finally" so even if there are errors, it stops "loading"
         this.loading = false})
         this.loadBanner();
         }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   img.logo {
     width: 290px;
@@ -211,7 +189,6 @@
     margin-left:100px;
     margin-top:-60px;
 
-   /* margin: 0 auto;*/
   
   }
   img.notlogin {
@@ -246,9 +223,7 @@
     color:black;
     font-size:29px;
     font-weight:bold;
-    /*margin-left: 40px;*/
-    /*font-style: oblique;*/
-    /*font-family: 'Times New Roman', Times, serif;*/
+
   }
   h3.greeting {
     text-align:center;
@@ -258,7 +233,6 @@
     margin-left: 75px;
     margin-right:-10px;
     margin-top:-10px;
-    /*font-style: oblique;*/
     margin-bottom:18px;
     font-family: 'Times New Roman', Times, serif;
   }
@@ -278,7 +252,6 @@
     font-weight:bold;  
   }
   .el-card {
-    /*margin-top:10px;*/
   
     margin: 13px;
     background-color: whitesmoke;
@@ -287,14 +260,12 @@
     margin-right:-10px;
   }
   .el-card.conference {
-    /*margin-top:10px;*/
     margin: 13px;
     background-color: whitesmoke;
     text-align: center;
     margin-left:70px;
     margin-right:-10px;
-    /*margin-right: -75px;
-    /margin-left: -40px;*/
+  
   }
   h1.figure{
     margin-top: -22px;
