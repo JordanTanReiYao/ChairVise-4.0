@@ -405,46 +405,49 @@ Vue.use(Notifications);
         }
         if (this.recordType=="AuthorRecord")
         {
-        this.displayAuthor=true;
         this.displayReview=false;
         this.displaySubmission=false;
         this.$store.dispatch('getAuthorRecordVersionList',this.version);
         
+        setTimeout(()=>{
         this.displayData=Array.from(new Set(this.$store.state.record.AuthorRecordVersionList.map(v => new Object({
             id:v.id, version: v.version.versionId, type: v.version.recordType,submissionId:v.submissionId,
             firstName:v.firstName,lastName:v.lastName,email:v.email,
             country:v.country,organisation:v.organisation,webPage:v.webPage,
-            personId:v.personId,isCorresponding:v.isCorresponding}))));}
+            personId:v.personId,isCorresponding:v.isCorresponding}))));
+            this.displayAuthor=true;},1000)
+            ;}
 
         if (this.recordType=="ReviewRecord")
         {
         this.displayAuthor=false;
-        this.displayReview=true;
         this.displaySubmission=false;
         this.$store.dispatch('getReviewRecordVersionList',this.version);
         
+        setTimeout(()=>{
+        this.displayReview=true;
         this.displayData=Array.from(new Set(this.$store.state.record.ReviewRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,reviewId:v.reviewId,numReviewAssignment:v.numReviewAssignment,
           reviewerName:v.reviewerName,expertiseLevel:v.expertiseLevel,confidenceLevel:v.confidenceLevel,
           reviewComment:v.reviewComment,overallEvaluationScore:v.overallEvaluationScore,
           reviewSubmissionTime:v.reviewSubmissionTime,hasRecommendedForBestPaper:v.hasRecommendedForBestPaper,
           version: v.version.versionId,
-          type: v.version.recordType}))));}
+          type: v.version.recordType}))))},1000);}
 
         if (this.recordType=="SubmissionRecord")
         {
-          this.displaySubmission=true;
           this.displayAuthor=false;
           this.displayReview=false;
           this.$store.dispatch('getSubmissionRecordVersionList',this.version);
 
+          setTimeout(()=>{
+          this.displaySubmission=true;
           this.displayData=Array.from(new Set(this.$store.state.record.SubmissionRecordVersionList.map(v => new Object({id: v.id,
           submissionId: v.submissionId,trackId:v.trackId,trackName:v.trackName,title:v.title,
           authors:v.authors,submissionTime:v.submissionTime,lastUpdatedTime:v.lastUpdatedTime,
           keywords:v.keywords,submissionAbstract:v.submissionAbstract,version:v.version.versionId,
           type:v.version.recordType,isAccepted:v.isAccepted,isNotified:v.isNotified,
-          isReviewsSent:v.isReviewsSent}))));
-
+          isReviewsSent:v.isReviewsSent}))))},1000);
           }
     },
     handlePageChange(page) {
@@ -605,6 +608,10 @@ table.dtable{
   margin-left:auto;
   margin-right:auto;
   
+}
+.ddtable{
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 td{
